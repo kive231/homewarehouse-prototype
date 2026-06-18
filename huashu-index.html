@@ -6,7 +6,7 @@
 <title>家庭仓库 — Huashu Redesign</title>
 <script src="react.production.min.js"></script>
 <script src="react-dom.production.min.js"></script>
-<script src="babel.min.js"></script>
+
 <style>
 :root{
   --bg:#f3f7f5; --screen-bg:#f8fbfa; --card:#fff; --ink:#1a232e;
@@ -238,628 +238,1393 @@ h1{text-align:center;font-size:22px;font-weight:720;letter-spacing:-.3px;color:#
 <p class="sub">Huashu Redesign · 13 页 · 4 Tab · 薄荷青</p>
 <div class="tile-grid" id="root"></div>
 
-<script type="text/babel">
-const {useState} = React;
+<script>
+const {
+  useState
+} = React;
 
 // ======== DATA ========
 const data = {
-  summary: {total:128,expiring:3,lowStock:5,fullBoxes:2,cabinets:4,boxes:18},
-  recentItems:[
-    {id:1,name:"温莎牛顿 24色颜料",loc:"书房A柜 / 2层 / 蓝盒",qty:3,status:"expiring",expireIn:30},
-    {id:2,name:"8K 水彩纸",loc:"工具柜 / 1层 / 纸盒",qty:1,status:"low"},
-    {id:3,name:"3M 美纹纸胶带",loc:"工具柜 / B盒",qty:4,status:"ok"},
-    {id:4,name:"A4 素描纸",loc:"书房A柜 / 3层",qty:20,status:"ok"},
-  ],
-  allItems:[
-    {id:1,name:"温莎牛顿 24色颜料",cat:"画材",loc:"书房A柜/2层/蓝盒",qty:3,status:"expiring",expireIn:30},
-    {id:2,name:"8K 水彩纸",cat:"纸张",loc:"工具柜/1层/纸盒",qty:1,status:"low"},
-    {id:3,name:"3M 美纹纸胶带",cat:"工具",loc:"工具柜/B盒",qty:4,status:"ok"},
-    {id:4,name:"A4 素描纸",cat:"纸张",loc:"书房A柜/3层",qty:20,status:"ok"},
-    {id:5,name:"辉柏嘉彩铅48色",cat:"画材",loc:"书房A柜/2层/绿盒",qty:1,status:"ok"},
-    {id:6,name:"美工刀 大号",cat:"工具",loc:"工具柜/A盒",qty:2,status:"ok"},
-  ],
-  cabinets:[
-    {id:1,name:"书房 A 柜",layers:3,boxes:7,items:46,capacity:"normal",pct:62},
-    {id:2,name:"工具柜",layers:2,boxes:5,items:31,capacity:"full",pct:88},
-    {id:3,name:"储物间 C 柜",layers:2,boxes:4,items:28,capacity:"normal",pct:54},
-    {id:4,name:"阳台杂物柜",layers:1,boxes:2,items:23,capacity:"over",pct:95},
-  ],
-  cabinetLayers:{
-    1:[{id:11,name:"1层",boxes:3,items:18},{id:12,name:"2层",boxes:2,items:16},{id:13,name:"3层",boxes:2,items:12}],
-    2:[{id:21,name:"1层",boxes:3,items:21},{id:22,name:"2层",boxes:2,items:10}],
+  summary: {
+    total: 128,
+    expiring: 3,
+    lowStock: 5,
+    fullBoxes: 2,
+    cabinets: 4,
+    boxes: 18
   },
-  layerBoxes:{
-    11:[{id:111,name:"蓝盒",items:8},{id:112,name:"绿盒",items:6},{id:113,name:"文具盒",items:4}],
-    12:[{id:121,name:"蓝盒",items:10},{id:122,name:"木盒",items:6}],
-    13:[{id:131,name:"纸盒",items:8},{id:132,name:"塑料盒",items:4}],
-    21:[{id:211,name:"A盒",items:12},{id:212,name:"B盒",items:5},{id:213,name:"零件盒",items:4}],
-    22:[{id:221,name:"大盒",items:7},{id:222,name:"小盒",items:3}],
+  recentItems: [{
+    id: 1,
+    name: "温莎牛顿 24色颜料",
+    loc: "书房A柜 / 2层 / 蓝盒",
+    qty: 3,
+    status: "expiring",
+    expireIn: 30
+  }, {
+    id: 2,
+    name: "8K 水彩纸",
+    loc: "工具柜 / 1层 / 纸盒",
+    qty: 1,
+    status: "low"
+  }, {
+    id: 3,
+    name: "3M 美纹纸胶带",
+    loc: "工具柜 / B盒",
+    qty: 4,
+    status: "ok"
+  }, {
+    id: 4,
+    name: "A4 素描纸",
+    loc: "书房A柜 / 3层",
+    qty: 20,
+    status: "ok"
+  }],
+  allItems: [{
+    id: 1,
+    name: "温莎牛顿 24色颜料",
+    cat: "画材",
+    loc: "书房A柜/2层/蓝盒",
+    qty: 3,
+    status: "expiring",
+    expireIn: 30
+  }, {
+    id: 2,
+    name: "8K 水彩纸",
+    cat: "纸张",
+    loc: "工具柜/1层/纸盒",
+    qty: 1,
+    status: "low"
+  }, {
+    id: 3,
+    name: "3M 美纹纸胶带",
+    cat: "工具",
+    loc: "工具柜/B盒",
+    qty: 4,
+    status: "ok"
+  }, {
+    id: 4,
+    name: "A4 素描纸",
+    cat: "纸张",
+    loc: "书房A柜/3层",
+    qty: 20,
+    status: "ok"
+  }, {
+    id: 5,
+    name: "辉柏嘉彩铅48色",
+    cat: "画材",
+    loc: "书房A柜/2层/绿盒",
+    qty: 1,
+    status: "ok"
+  }, {
+    id: 6,
+    name: "美工刀 大号",
+    cat: "工具",
+    loc: "工具柜/A盒",
+    qty: 2,
+    status: "ok"
+  }],
+  cabinets: [{
+    id: 1,
+    name: "书房 A 柜",
+    layers: 3,
+    boxes: 7,
+    items: 46,
+    capacity: "normal",
+    pct: 62
+  }, {
+    id: 2,
+    name: "工具柜",
+    layers: 2,
+    boxes: 5,
+    items: 31,
+    capacity: "full",
+    pct: 88
+  }, {
+    id: 3,
+    name: "储物间 C 柜",
+    layers: 2,
+    boxes: 4,
+    items: 28,
+    capacity: "normal",
+    pct: 54
+  }, {
+    id: 4,
+    name: "阳台杂物柜",
+    layers: 1,
+    boxes: 2,
+    items: 23,
+    capacity: "over",
+    pct: 95
+  }],
+  cabinetLayers: {
+    1: [{
+      id: 11,
+      name: "1层",
+      boxes: 3,
+      items: 18
+    }, {
+      id: 12,
+      name: "2层",
+      boxes: 2,
+      items: 16
+    }, {
+      id: 13,
+      name: "3层",
+      boxes: 2,
+      items: 12
+    }],
+    2: [{
+      id: 21,
+      name: "1层",
+      boxes: 3,
+      items: 21
+    }, {
+      id: 22,
+      name: "2层",
+      boxes: 2,
+      items: 10
+    }]
   },
-  categories:[
-    {id:1,name:"画材",subs:["颜料","画笔","画纸"]},
-    {id:2,name:"工具",subs:["切割","测量","胶带"]},
-    {id:3,name:"纸张",subs:["水彩纸","素描纸","卡纸"]},
-  ],
-  records:[
-    {id:1,action:"消耗",item:"温莎牛顿颜料",qty:-1,time:"今天 14:30",loc:"书房A柜/2层/蓝盒"},
-    {id:2,action:"补货",item:"A4 素描纸",qty:10,time:"昨天 09:15",loc:"书房A柜/3层"},
-    {id:3,action:"移动",item:"3M 胶带",qty:0,time:"6月8日",loc:"工具柜/A盒 → B盒"},
-    {id:4,action:"新增",item:"辉柏嘉彩铅",qty:1,time:"6月7日",loc:"书房A柜/2层/绿盒"},
-  ],
-  profile:{name:"曦曦",role:"管理员",plan:"个人版"},
+  layerBoxes: {
+    11: [{
+      id: 111,
+      name: "蓝盒",
+      items: 8
+    }, {
+      id: 112,
+      name: "绿盒",
+      items: 6
+    }, {
+      id: 113,
+      name: "文具盒",
+      items: 4
+    }],
+    12: [{
+      id: 121,
+      name: "蓝盒",
+      items: 10
+    }, {
+      id: 122,
+      name: "木盒",
+      items: 6
+    }],
+    13: [{
+      id: 131,
+      name: "纸盒",
+      items: 8
+    }, {
+      id: 132,
+      name: "塑料盒",
+      items: 4
+    }],
+    21: [{
+      id: 211,
+      name: "A盒",
+      items: 12
+    }, {
+      id: 212,
+      name: "B盒",
+      items: 5
+    }, {
+      id: 213,
+      name: "零件盒",
+      items: 4
+    }],
+    22: [{
+      id: 221,
+      name: "大盒",
+      items: 7
+    }, {
+      id: 222,
+      name: "小盒",
+      items: 3
+    }]
+  },
+  categories: [{
+    id: 1,
+    name: "画材",
+    subs: ["颜料", "画笔", "画纸"]
+  }, {
+    id: 2,
+    name: "工具",
+    subs: ["切割", "测量", "胶带"]
+  }, {
+    id: 3,
+    name: "纸张",
+    subs: ["水彩纸", "素描纸", "卡纸"]
+  }],
+  records: [{
+    id: 1,
+    action: "消耗",
+    item: "温莎牛顿颜料",
+    qty: -1,
+    time: "今天 14:30",
+    loc: "书房A柜/2层/蓝盒"
+  }, {
+    id: 2,
+    action: "补货",
+    item: "A4 素描纸",
+    qty: 10,
+    time: "昨天 09:15",
+    loc: "书房A柜/3层"
+  }, {
+    id: 3,
+    action: "移动",
+    item: "3M 胶带",
+    qty: 0,
+    time: "6月8日",
+    loc: "工具柜/A盒 → B盒"
+  }, {
+    id: 4,
+    action: "新增",
+    item: "辉柏嘉彩铅",
+    qty: 1,
+    time: "6月7日",
+    loc: "书房A柜/2层/绿盒"
+  }],
+  profile: {
+    name: "曦曦",
+    role: "管理员",
+    plan: "个人版"
+  }
 };
 
 // ======== ICONS ========
 const Icons = {
-  home: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>,
-  box: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>,
-  cabinet: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="4" y="2" width="16" height="20" rx="1"/><line x1="4" y1="10" x2="20" y2="10"/></svg>,
-  search: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>,
-  scan: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7V5a2 2 0 012-2h2"/><path d="M17 3h2a2 2 0 012 2v2"/><path d="M21 17v2a2 2 0 01-2 2h-2"/><path d="M7 21H5a2 2 0 01-2-2v-2"/><line x1="7" y1="12" x2="17" y2="12"/></svg>,
-  user: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>,
-  plus: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>,
-  minus: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>,
-  chevronR: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>,
-  chevronL: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"/></svg>,
-  clock: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>,
-  settings: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 002.83-2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>,
-  list: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>,
-  qr: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>,
-  edit: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>,
-  export: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>,
+  home: /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.8",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"
+  }), /*#__PURE__*/React.createElement("polyline", {
+    points: "9 22 9 12 15 12 15 22"
+  })),
+  box: /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.8",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"
+  })),
+  cabinet: /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.8",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("rect", {
+    x: "4",
+    y: "2",
+    width: "16",
+    height: "20",
+    rx: "1"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "4",
+    y1: "10",
+    x2: "20",
+    y2: "10"
+  })),
+  search: /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.8",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("circle", {
+    cx: "11",
+    cy: "11",
+    r: "8"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "21",
+    y1: "21",
+    x2: "16.65",
+    y2: "16.65"
+  })),
+  scan: /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.8",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M3 7V5a2 2 0 012-2h2"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M17 3h2a2 2 0 012 2v2"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M21 17v2a2 2 0 01-2 2h-2"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M7 21H5a2 2 0 01-2-2v-2"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "7",
+    y1: "12",
+    x2: "17",
+    y2: "12"
+  })),
+  user: /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.8",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"
+  }), /*#__PURE__*/React.createElement("circle", {
+    cx: "12",
+    cy: "7",
+    r: "4"
+  })),
+  plus: /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.8",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("line", {
+    x1: "12",
+    y1: "5",
+    x2: "12",
+    y2: "19"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "5",
+    y1: "12",
+    x2: "19",
+    y2: "12"
+  })),
+  minus: /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.8",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("line", {
+    x1: "5",
+    y1: "12",
+    x2: "19",
+    y2: "12"
+  })),
+  chevronR: /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("polyline", {
+    points: "9 18 15 12 9 6"
+  })),
+  chevronL: /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "2",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("polyline", {
+    points: "15 18 9 12 15 6"
+  })),
+  clock: /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.8",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("circle", {
+    cx: "12",
+    cy: "12",
+    r: "10"
+  }), /*#__PURE__*/React.createElement("polyline", {
+    points: "12 6 12 12 16 14"
+  })),
+  settings: /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.8",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("circle", {
+    cx: "12",
+    cy: "12",
+    r: "3"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 002.83-2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"
+  })),
+  list: /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.8",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("line", {
+    x1: "8",
+    y1: "6",
+    x2: "21",
+    y2: "6"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "8",
+    y1: "12",
+    x2: "21",
+    y2: "12"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "8",
+    y1: "18",
+    x2: "21",
+    y2: "18"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "3",
+    y1: "6",
+    x2: "3.01",
+    y2: "6"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "3",
+    y1: "12",
+    x2: "3.01",
+    y2: "12"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "3",
+    y1: "18",
+    x2: "3.01",
+    y2: "18"
+  })),
+  qr: /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.8",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("rect", {
+    x: "3",
+    y: "3",
+    width: "7",
+    height: "7"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "14",
+    y: "3",
+    width: "7",
+    height: "7"
+  }), /*#__PURE__*/React.createElement("rect", {
+    x: "3",
+    y: "14",
+    width: "7",
+    height: "7"
+  })),
+  edit: /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.8",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"
+  }), /*#__PURE__*/React.createElement("path", {
+    d: "M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"
+  })),
+  export: /*#__PURE__*/React.createElement("svg", {
+    viewBox: "0 0 24 24",
+    fill: "none",
+    stroke: "currentColor",
+    strokeWidth: "1.8",
+    strokeLinecap: "round",
+    strokeLinejoin: "round"
+  }, /*#__PURE__*/React.createElement("path", {
+    d: "M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"
+  }), /*#__PURE__*/React.createElement("polyline", {
+    points: "7 10 12 15 17 10"
+  }), /*#__PURE__*/React.createElement("line", {
+    x1: "12",
+    y1: "15",
+    x2: "12",
+    y2: "3"
+  }))
 };
 
 // ======== COMPONENTS ========
-function StatusTag({status,expireIn}){
-  if(status==="expiring") return <span className="tag warn">{expireIn}天</span>;
-  if(status==="low") return <span className="tag bad">低库存</span>;
+function StatusTag({
+  status,
+  expireIn
+}) {
+  if (status === "expiring") return /*#__PURE__*/React.createElement("span", {
+    className: "tag warn"
+  }, expireIn, "天");
+  if (status === "low") return /*#__PURE__*/React.createElement("span", {
+    className: "tag bad"
+  }, "低库存");
   return null;
 }
-
-function ModalSheet({title,children,onClose}){
-  return (
-    <div className="modal-overlay" onClick={(e)=>{if(e.target===e.currentTarget) onClose()}}>
-      <div className="modal-sheet">
-        <h3>{title}</h3>
-        {children}
-      </div>
-    </div>
-  );
+function ModalSheet({
+  title,
+  children,
+  onClose
+}) {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "modal-overlay",
+    onClick: e => {
+      if (e.target === e.currentTarget) onClose();
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "modal-sheet"
+  }, /*#__PURE__*/React.createElement("h3", null, title), children));
 }
 
 // ======== HOME SCREEN ========
-function HomeScreen({onNavigate}){
-  const s=data.summary;
-  return (
-    <div className="scroll-area">
-      <div className="content">
-        <div className="hero-card">
-          <div style={{fontSize:11,opacity:.8}}>家庭仓库</div>
-          <h2>{s.total} 件物品</h2>
-          <p>{s.expiring} 件临期 · {s.lowStock} 件低库存</p>
-        </div>
-
-        <div className="stats-row card">
-          <div className="stat-item" onClick={()=>onNavigate('items','expiring')}>
-            <b style={{color:'var(--orange)'}}>{s.expiring}</b><span>临期</span>
-          </div>
-          <div className="stat-item" onClick={()=>onNavigate('items','low')}>
-            <b style={{color:'var(--red)'}}>{s.lowStock}</b><span>低库存</span>
-          </div>
-          <div className="stat-item" onClick={()=>onNavigate('items','all')}>
-            <b>{s.total}</b><span>全部</span>
-          </div>
-        </div>
-
-        <div className="action-row">
-          <div className="action-tile" onClick={()=>onNavigate('item-form')}>
-            {Icons.plus}<b>新增物品</b><small>录入仓库</small>
-          </div>
-          <div className="action-tile" onClick={()=>onNavigate('scan')}>
-            {Icons.scan}<b>扫码</b><small>定位/绑定</small>
-          </div>
-        </div>
-
-        <div className="section-head"><b>快捷入口</b></div>
-        <div className="quick-row">
-          <button className="quick-btn" onClick={()=>onNavigate('items','画材')}>画材</button>
-          <button className="quick-btn" onClick={()=>onNavigate('items','工具')}>工具</button>
-          <button className="quick-btn" onClick={()=>onNavigate('space','1')}>A柜</button>
-          <button className="quick-btn" onClick={()=>onNavigate('space','2')}>工具柜</button>
-        </div>
-
-        <div className="section-head"><b>最近物品</b><a onClick={()=>onNavigate('items','all')}>全部</a></div>
-        <div className="card" style={{padding:'0 14px'}}>
-          {data.recentItems.map(it=>(
-            <div key={it.id} className="list-item" onClick={()=>onNavigate('item-detail',it.id)}>
-              <div className="list-icon">{Icons.box}</div>
-              <div className="list-info">
-                <b>{it.name}</b>
-                <small>{it.loc}</small>
-              </div>
-              <div className="list-right">
-                {it.status==="ok" && <span style={{fontWeight:700,fontSize:13}}>×{it.qty}</span>}
-                <StatusTag status={it.status} expireIn={it.expireIn}/>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+function HomeScreen({
+  onNavigate
+}) {
+  const s = data.summary;
+  return /*#__PURE__*/React.createElement("div", {
+    className: "scroll-area"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "content"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "hero-card"
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      opacity: .8
+    }
+  }, "家庭仓库"), /*#__PURE__*/React.createElement("h2", null, s.total, " 件物品"), /*#__PURE__*/React.createElement("p", null, s.expiring, " 件临期 · ", s.lowStock, " 件低库存")), /*#__PURE__*/React.createElement("div", {
+    className: "stats-row card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "stat-item",
+    onClick: () => onNavigate('items', 'expiring')
+  }, /*#__PURE__*/React.createElement("b", {
+    style: {
+      color: 'var(--orange)'
+    }
+  }, s.expiring), /*#__PURE__*/React.createElement("span", null, "临期")), /*#__PURE__*/React.createElement("div", {
+    className: "stat-item",
+    onClick: () => onNavigate('items', 'low')
+  }, /*#__PURE__*/React.createElement("b", {
+    style: {
+      color: 'var(--red)'
+    }
+  }, s.lowStock), /*#__PURE__*/React.createElement("span", null, "低库存")), /*#__PURE__*/React.createElement("div", {
+    className: "stat-item",
+    onClick: () => onNavigate('items', 'all')
+  }, /*#__PURE__*/React.createElement("b", null, s.total), /*#__PURE__*/React.createElement("span", null, "全部"))), /*#__PURE__*/React.createElement("div", {
+    className: "action-row"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "action-tile",
+    onClick: () => onNavigate('item-form')
+  }, Icons.plus, /*#__PURE__*/React.createElement("b", null, "新增物品"), /*#__PURE__*/React.createElement("small", null, "录入仓库")), /*#__PURE__*/React.createElement("div", {
+    className: "action-tile",
+    onClick: () => onNavigate('scan')
+  }, Icons.scan, /*#__PURE__*/React.createElement("b", null, "扫码"), /*#__PURE__*/React.createElement("small", null, "定位/绑定"))), /*#__PURE__*/React.createElement("div", {
+    className: "section-head"
+  }, /*#__PURE__*/React.createElement("b", null, "快捷入口")), /*#__PURE__*/React.createElement("div", {
+    className: "quick-row"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "quick-btn",
+    onClick: () => onNavigate('items', '画材')
+  }, "画材"), /*#__PURE__*/React.createElement("button", {
+    className: "quick-btn",
+    onClick: () => onNavigate('items', '工具')
+  }, "工具"), /*#__PURE__*/React.createElement("button", {
+    className: "quick-btn",
+    onClick: () => onNavigate('space', '1')
+  }, "A柜"), /*#__PURE__*/React.createElement("button", {
+    className: "quick-btn",
+    onClick: () => onNavigate('space', '2')
+  }, "工具柜")), /*#__PURE__*/React.createElement("div", {
+    className: "section-head"
+  }, /*#__PURE__*/React.createElement("b", null, "最近物品"), /*#__PURE__*/React.createElement("a", {
+    onClick: () => onNavigate('items', 'all')
+  }, "全部")), /*#__PURE__*/React.createElement("div", {
+    className: "card",
+    style: {
+      padding: '0 14px'
+    }
+  }, data.recentItems.map(it => /*#__PURE__*/React.createElement("div", {
+    key: it.id,
+    className: "list-item",
+    onClick: () => onNavigate('item-detail', it.id)
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "list-icon"
+  }, Icons.box), /*#__PURE__*/React.createElement("div", {
+    className: "list-info"
+  }, /*#__PURE__*/React.createElement("b", null, it.name), /*#__PURE__*/React.createElement("small", null, it.loc)), /*#__PURE__*/React.createElement("div", {
+    className: "list-right"
+  }, it.status === "ok" && /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontWeight: 700,
+      fontSize: 13
+    }
+  }, "×", it.qty), /*#__PURE__*/React.createElement(StatusTag, {
+    status: it.status,
+    expireIn: it.expireIn
+  })))))));
 }
 
 // ======== ITEMS SCREEN ========
-function ItemsScreen({onNavigate,filter}){
-  const [cat,setCat]=useState(filter||'全部');
-  const cats=['全部','画材','工具','纸张'];
-  let items=data.allItems;
-  if(cat!=='全部') items=items.filter(i=>i.cat===cat);
-  if(filter==='expiring') items=items.filter(i=>i.status==='expiring');
-  if(filter==='low') items=items.filter(i=>i.status==='low');
-
-  return (
-    <div className="scroll-area">
-      <div className="content">
-        <div className="search-bar">{Icons.search}<span>搜索物品、分类、位置</span></div>
-        <div className="chip-row">
-          {cats.map(c=><button key={c} className={"chip"+(cat===c?" active":"")} onClick={()=>setCat(c)}>{c}</button>)}
-        </div>
-        <div className="section-head"><b>{cat}</b><a onClick={()=>onNavigate('item-form')}>+新增</a></div>
-        <div className="card" style={{padding:'0 14px'}}>
-          {items.map(it=>(
-            <div key={it.id} className="list-item" onClick={()=>onNavigate('item-detail',it.id)}>
-              <div className="list-icon">{Icons.box}</div>
-              <div className="list-info">
-                <b>{it.name}</b>
-                <small>{it.loc}</small>
-              </div>
-              <div className="list-right">
-                {it.status==="ok" && <span style={{fontWeight:700,fontSize:13}}>×{it.qty}</span>}
-                <StatusTag status={it.status} expireIn={it.expireIn}/>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+function ItemsScreen({
+  onNavigate,
+  filter
+}) {
+  const [cat, setCat] = useState(filter || '全部');
+  const cats = ['全部', '画材', '工具', '纸张'];
+  let items = data.allItems;
+  if (cat !== '全部') items = items.filter(i => i.cat === cat);
+  if (filter === 'expiring') items = items.filter(i => i.status === 'expiring');
+  if (filter === 'low') items = items.filter(i => i.status === 'low');
+  return /*#__PURE__*/React.createElement("div", {
+    className: "scroll-area"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "content"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "search-bar"
+  }, Icons.search, /*#__PURE__*/React.createElement("span", null, "搜索物品、分类、位置")), /*#__PURE__*/React.createElement("div", {
+    className: "chip-row"
+  }, cats.map(c => /*#__PURE__*/React.createElement("button", {
+    key: c,
+    className: "chip" + (cat === c ? " active" : ""),
+    onClick: () => setCat(c)
+  }, c))), /*#__PURE__*/React.createElement("div", {
+    className: "section-head"
+  }, /*#__PURE__*/React.createElement("b", null, cat), /*#__PURE__*/React.createElement("a", {
+    onClick: () => onNavigate('item-form')
+  }, "+新增")), /*#__PURE__*/React.createElement("div", {
+    className: "card",
+    style: {
+      padding: '0 14px'
+    }
+  }, items.map(it => /*#__PURE__*/React.createElement("div", {
+    key: it.id,
+    className: "list-item",
+    onClick: () => onNavigate('item-detail', it.id)
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "list-icon"
+  }, Icons.box), /*#__PURE__*/React.createElement("div", {
+    className: "list-info"
+  }, /*#__PURE__*/React.createElement("b", null, it.name), /*#__PURE__*/React.createElement("small", null, it.loc)), /*#__PURE__*/React.createElement("div", {
+    className: "list-right"
+  }, it.status === "ok" && /*#__PURE__*/React.createElement("span", {
+    style: {
+      fontWeight: 700,
+      fontSize: 13
+    }
+  }, "×", it.qty), /*#__PURE__*/React.createElement(StatusTag, {
+    status: it.status,
+    expireIn: it.expireIn
+  })))))));
 }
 
 // ======== ITEM DETAIL ========
-function ItemDetail({itemId,onNavigate}){
-  const item=data.allItems.find(i=>i.id===itemId)||data.allItems[0];
-  const [modal,setModal]=useState(null);
-
-  return (
-    <div className="scroll-area">
-      <div className="content">
-        <div className="detail-hero">
-          <div style={{fontSize:11,color:'var(--muted)'}}>{item.cat} · {item.loc}</div>
-          <h2>{item.name}</h2>
-          <div className="count">{item.qty}</div>
-          <StatusTag status={item.status} expireIn={item.expireIn}/>
-        </div>
-
-        <div className="card">
-          <div className="info-row"><span className="k">分类</span><span className="v">{item.cat}</span></div>
-          <div className="info-row"><span className="k">位置</span><span className="v">{item.loc}</span></div>
-          <div className="info-row"><span className="k">数量</span><span className="v">{item.qty}</span></div>
-          {item.expireIn && <div className="info-row"><span className="k">到期</span><span className="v" style={{color:'var(--orange)'}}>{item.expireIn}天后</span></div>}
-        </div>
-
-        <div className="action-row">
-          <button className="btn btn-outline" onClick={()=>setModal('consume')}>{Icons.minus} 消耗</button>
-          <button className="btn btn-outline" onClick={()=>setModal('replenish')}>{Icons.plus} 补货</button>
-        </div>
-        <button className="btn btn-outline" onClick={()=>setModal('move')}>{Icons.edit} 移动位置</button>
-        <button className="btn btn-danger" style={{marginTop:8}} onClick={()=>onNavigate('items','all')}>删除物品</button>
-
-        {modal && <ModalSheet title={modal==='consume'?'消耗物品':modal==='replenish'?'补货物品':'移动位置'} onClose={()=>setModal(null)}>
-          <p style={{textAlign:'center',color:'var(--muted)',marginBottom:12}}>{item.name} · 当前 ×{item.qty}</p>
-          {modal!=='move' && <div style={{textAlign:'center',marginBottom:12}}>
-            <input type="number" defaultValue={1} min={1} className="input-field" style={{width:80,textAlign:'center'}}/>
-          </div>}
-          {modal==='move' && <div className="form-stack">
-            <input className="input-field" placeholder="目标柜子"/>
-            <input className="input-field" placeholder="目标盒子"/>
-          </div>}
-          <button className="btn btn-primary" onClick={()=>setModal(null)}>确认</button>
-        </ModalSheet>}
-      </div>
-    </div>
-  );
+function ItemDetail({
+  itemId,
+  onNavigate
+}) {
+  const item = data.allItems.find(i => i.id === itemId) || data.allItems[0];
+  const [modal, setModal] = useState(null);
+  return /*#__PURE__*/React.createElement("div", {
+    className: "scroll-area"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "content"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "detail-hero"
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontSize: 11,
+      color: 'var(--muted)'
+    }
+  }, item.cat, " · ", item.loc), /*#__PURE__*/React.createElement("h2", null, item.name), /*#__PURE__*/React.createElement("div", {
+    className: "count"
+  }, item.qty), /*#__PURE__*/React.createElement(StatusTag, {
+    status: item.status,
+    expireIn: item.expireIn
+  })), /*#__PURE__*/React.createElement("div", {
+    className: "card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "info-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "k"
+  }, "分类"), /*#__PURE__*/React.createElement("span", {
+    className: "v"
+  }, item.cat)), /*#__PURE__*/React.createElement("div", {
+    className: "info-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "k"
+  }, "位置"), /*#__PURE__*/React.createElement("span", {
+    className: "v"
+  }, item.loc)), /*#__PURE__*/React.createElement("div", {
+    className: "info-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "k"
+  }, "数量"), /*#__PURE__*/React.createElement("span", {
+    className: "v"
+  }, item.qty)), item.expireIn && /*#__PURE__*/React.createElement("div", {
+    className: "info-row"
+  }, /*#__PURE__*/React.createElement("span", {
+    className: "k"
+  }, "到期"), /*#__PURE__*/React.createElement("span", {
+    className: "v",
+    style: {
+      color: 'var(--orange)'
+    }
+  }, item.expireIn, "天后"))), /*#__PURE__*/React.createElement("div", {
+    className: "action-row"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-outline",
+    onClick: () => setModal('consume')
+  }, Icons.minus, " 消耗"), /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-outline",
+    onClick: () => setModal('replenish')
+  }, Icons.plus, " 补货")), /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-outline",
+    onClick: () => setModal('move')
+  }, Icons.edit, " 移动位置"), /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-danger",
+    style: {
+      marginTop: 8
+    },
+    onClick: () => onNavigate('items', 'all')
+  }, "删除物品"), modal && /*#__PURE__*/React.createElement(ModalSheet, {
+    title: modal === 'consume' ? '消耗物品' : modal === 'replenish' ? '补货物品' : '移动位置',
+    onClose: () => setModal(null)
+  }, /*#__PURE__*/React.createElement("p", {
+    style: {
+      textAlign: 'center',
+      color: 'var(--muted)',
+      marginBottom: 12
+    }
+  }, item.name, " · 当前 ×", item.qty), modal !== 'move' && /*#__PURE__*/React.createElement("div", {
+    style: {
+      textAlign: 'center',
+      marginBottom: 12
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "number",
+    defaultValue: 1,
+    min: 1,
+    className: "input-field",
+    style: {
+      width: 80,
+      textAlign: 'center'
+    }
+  })), modal === 'move' && /*#__PURE__*/React.createElement("div", {
+    className: "form-stack"
+  }, /*#__PURE__*/React.createElement("input", {
+    className: "input-field",
+    placeholder: "目标柜子"
+  }), /*#__PURE__*/React.createElement("input", {
+    className: "input-field",
+    placeholder: "目标盒子"
+  })), /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-primary",
+    onClick: () => setModal(null)
+  }, "确认"))));
 }
 
 // ======== ITEM FORM ========
-function ItemForm(){
-  return (
-    <div className="scroll-area">
-      <div className="content">
-        <div className="section-head"><b>新增物品</b></div>
-        <div className="form-stack card">
-          <div><div className="form-label">物品名称</div><input className="input-field" placeholder="如：温莎牛顿颜料"/></div>
-          <div><div className="form-label">分类</div><input className="input-field" placeholder="选择分类"/></div>
-          <div><div className="form-label">存放位置</div><input className="input-field" placeholder="选择柜子/盒子"/></div>
-          <div><div className="form-label">数量</div><input className="input-field" type="number" defaultValue={1}/></div>
-          <div><div className="form-label">到期日期</div><input className="input-field" type="date"/></div>
-        </div>
-        <button className="btn btn-primary">确认录入</button>
-      </div>
-    </div>
-  );
+function ItemForm() {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "scroll-area"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "content"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "section-head"
+  }, /*#__PURE__*/React.createElement("b", null, "新增物品")), /*#__PURE__*/React.createElement("div", {
+    className: "form-stack card"
+  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "form-label"
+  }, "物品名称"), /*#__PURE__*/React.createElement("input", {
+    className: "input-field",
+    placeholder: "如：温莎牛顿颜料"
+  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "form-label"
+  }, "分类"), /*#__PURE__*/React.createElement("input", {
+    className: "input-field",
+    placeholder: "选择分类"
+  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "form-label"
+  }, "存放位置"), /*#__PURE__*/React.createElement("input", {
+    className: "input-field",
+    placeholder: "选择柜子/盒子"
+  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "form-label"
+  }, "数量"), /*#__PURE__*/React.createElement("input", {
+    className: "input-field",
+    type: "number",
+    defaultValue: 1
+  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
+    className: "form-label"
+  }, "到期日期"), /*#__PURE__*/React.createElement("input", {
+    className: "input-field",
+    type: "date"
+  }))), /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-primary"
+  }, "确认录入")));
 }
 
 // ======== SPACE SCREEN ========
-function SpaceScreen({onNavigate}){
-  const [view,setView]=useState('cabinets');
-  const [selCabinet,setSelCabinet]=useState(null);
-  const [selLayer,setSelLayer]=useState(null);
-  const [mode,setMode]=useState('space');
-
-  if(view==='cabinets'){
-    return (
-      <div className="scroll-area">
-        <div className="content">
-          <div className="chip-row">
-            <button className={"chip"+(mode==='space'?" active":"")} onClick={()=>setMode('space')}>空间</button>
-            <button className={"chip"+(mode==='category'?" active":"")} onClick={()=>setMode('category')}>分类</button>
-          </div>
-
-          {mode==='space' && <>
-            <div className="section-head"><b>空间管理</b><a onClick={()=>onNavigate('item-form')}>+柜子</a></div>
-            {data.cabinets.map(c=>(
-              <div key={c.id} className="tree-item" onClick={()=>{setSelCabinet(c);setView('layers:'+c.id)}}>
-                <div className="list-icon">{Icons.cabinet}</div>
-                <div style={{flex:1}}>
-                  <b>{c.name}</b>
-                  <div style={{display:'flex',alignItems:'center',gap:6,marginTop:4}}>
-                    <small>{c.layers}层 · {c.boxes}盒 · {c.items}件</small>
-                    {c.pct>85?<span className="tag bad">满</span>:c.pct>70?<span className="tag warn">偏满</span>:<span className="tag ok">正常</span>}
-                  </div>
-                  <div className="progress-bar" style={{width:'80%'}}>
-                    <div className={"fill"+(c.pct>85?" bad":c.pct>70?" warn":"")} style={{width:c.pct+'%'}}/>
-                  </div>
-                </div>
-                {Icons.chevronR}
-              </div>
-            ))}
-            <div className="card">
-              <div className="section-head"><b>概览</b></div>
-              <div className="stats-row">
-                <div className="stat-item"><b>{data.summary.cabinets}</b><span>柜子</span></div>
-                <div className="stat-item"><b>{data.summary.boxes}</b><span>盒子</span></div>
-                <div className="stat-item"><b style={{color:'var(--orange)'}}>{data.summary.fullBoxes}</b><span>偏高</span></div>
-              </div>
-            </div>
-          </>}
-
-          {mode==='category' && <>
-            <div className="section-head"><b>分类管理</b><a>+分类</a></div>
-            {data.categories.map(cat=>(
-              <div key={cat.id} className="tree-item">
-                <div className="list-icon">{Icons.box}</div>
-                <div style={{flex:1}}>
-                  <b>{cat.name}</b>
-                  <small>{cat.subs.join(' · ')}</small>
-                </div>
-                {Icons.chevronR}
-              </div>
-            ))}
-          </>}
-        </div>
-      </div>
-    );
+function SpaceScreen({
+  onNavigate
+}) {
+  const [view, setView] = useState('cabinets');
+  const [selCabinet, setSelCabinet] = useState(null);
+  const [selLayer, setSelLayer] = useState(null);
+  const [mode, setMode] = useState('space');
+  if (view === 'cabinets') {
+    return /*#__PURE__*/React.createElement("div", {
+      className: "scroll-area"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "content"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "chip-row"
+    }, /*#__PURE__*/React.createElement("button", {
+      className: "chip" + (mode === 'space' ? " active" : ""),
+      onClick: () => setMode('space')
+    }, "空间"), /*#__PURE__*/React.createElement("button", {
+      className: "chip" + (mode === 'category' ? " active" : ""),
+      onClick: () => setMode('category')
+    }, "分类")), mode === 'space' && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+      className: "section-head"
+    }, /*#__PURE__*/React.createElement("b", null, "空间管理"), /*#__PURE__*/React.createElement("a", {
+      onClick: () => onNavigate('item-form')
+    }, "+柜子")), data.cabinets.map(c => /*#__PURE__*/React.createElement("div", {
+      key: c.id,
+      className: "tree-item",
+      onClick: () => {
+        setSelCabinet(c);
+        setView('layers:' + c.id);
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "list-icon"
+    }, Icons.cabinet), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, /*#__PURE__*/React.createElement("b", null, c.name), /*#__PURE__*/React.createElement("div", {
+      style: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 6,
+        marginTop: 4
+      }
+    }, /*#__PURE__*/React.createElement("small", null, c.layers, "层 · ", c.boxes, "盒 · ", c.items, "件"), c.pct > 85 ? /*#__PURE__*/React.createElement("span", {
+      className: "tag bad"
+    }, "满") : c.pct > 70 ? /*#__PURE__*/React.createElement("span", {
+      className: "tag warn"
+    }, "偏满") : /*#__PURE__*/React.createElement("span", {
+      className: "tag ok"
+    }, "正常")), /*#__PURE__*/React.createElement("div", {
+      className: "progress-bar",
+      style: {
+        width: '80%'
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "fill" + (c.pct > 85 ? " bad" : c.pct > 70 ? " warn" : ""),
+      style: {
+        width: c.pct + '%'
+      }
+    }))), Icons.chevronR)), /*#__PURE__*/React.createElement("div", {
+      className: "card"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "section-head"
+    }, /*#__PURE__*/React.createElement("b", null, "概览")), /*#__PURE__*/React.createElement("div", {
+      className: "stats-row"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "stat-item"
+    }, /*#__PURE__*/React.createElement("b", null, data.summary.cabinets), /*#__PURE__*/React.createElement("span", null, "柜子")), /*#__PURE__*/React.createElement("div", {
+      className: "stat-item"
+    }, /*#__PURE__*/React.createElement("b", null, data.summary.boxes), /*#__PURE__*/React.createElement("span", null, "盒子")), /*#__PURE__*/React.createElement("div", {
+      className: "stat-item"
+    }, /*#__PURE__*/React.createElement("b", {
+      style: {
+        color: 'var(--orange)'
+      }
+    }, data.summary.fullBoxes), /*#__PURE__*/React.createElement("span", null, "偏高"))))), mode === 'category' && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
+      className: "section-head"
+    }, /*#__PURE__*/React.createElement("b", null, "分类管理"), /*#__PURE__*/React.createElement("a", null, "+分类")), data.categories.map(cat => /*#__PURE__*/React.createElement("div", {
+      key: cat.id,
+      className: "tree-item"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "list-icon"
+    }, Icons.box), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, /*#__PURE__*/React.createElement("b", null, cat.name), /*#__PURE__*/React.createElement("small", null, cat.subs.join(' · '))), Icons.chevronR)))));
   }
-
-  if(view.startsWith('layers:')){
-    const cid=parseInt(view.split(':')[1]);
-    const cab=data.cabinets.find(c=>c.id===cid);
-    const layers=data.cabinetLayers[cid]||[];
-    return (
-      <div className="scroll-area">
-        <div className="content">
-          <div className="breadcrumb">
-            <span onClick={()=>setView('cabinets')}>空间</span> › <b>{cab?.name}</b>
-          </div>
-          {layers.map(l=>(
-            <div key={l.id} className="tree-item" onClick={()=>{setSelLayer(l);setView('boxes:'+l.id)}}>
-              <div className="list-icon">{Icons.box}</div>
-              <div style={{flex:1}}>
-                <b>{l.name}</b>
-                <small>{l.boxes}盒 · {l.items}件</small>
-              </div>
-              {Icons.chevronR}
-            </div>
-          ))}
-          <button className="btn btn-outline" style={{marginTop:4}}>{Icons.plus} 添加层</button>
-        </div>
-      </div>
-    );
+  if (view.startsWith('layers:')) {
+    const cid = parseInt(view.split(':')[1]);
+    const cab = data.cabinets.find(c => c.id === cid);
+    const layers = data.cabinetLayers[cid] || [];
+    return /*#__PURE__*/React.createElement("div", {
+      className: "scroll-area"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "content"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "breadcrumb"
+    }, /*#__PURE__*/React.createElement("span", {
+      onClick: () => setView('cabinets')
+    }, "空间"), " › ", /*#__PURE__*/React.createElement("b", null, cab?.name)), layers.map(l => /*#__PURE__*/React.createElement("div", {
+      key: l.id,
+      className: "tree-item",
+      onClick: () => {
+        setSelLayer(l);
+        setView('boxes:' + l.id);
+      }
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "list-icon"
+    }, Icons.box), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, /*#__PURE__*/React.createElement("b", null, l.name), /*#__PURE__*/React.createElement("small", null, l.boxes, "盒 · ", l.items, "件")), Icons.chevronR)), /*#__PURE__*/React.createElement("button", {
+      className: "btn btn-outline",
+      style: {
+        marginTop: 4
+      }
+    }, Icons.plus, " 添加层")));
   }
-
-  if(view.startsWith('boxes:')){
-    const lid=parseInt(view.split(':')[1]);
-    const boxes=data.layerBoxes[lid]||[];
-    return (
-      <div className="scroll-area">
-        <div className="content">
-          <div className="breadcrumb">
-            <span onClick={()=>setView('cabinets')}>空间</span> › <span onClick={()=>setView('layers:'+(selCabinet?.id||1))}>{selCabinet?.name||'柜子'}</span> › <b>{selLayer?.name||'层'}</b>
-          </div>
-          {boxes.map(b=>(
-            <div key={b.id} className="tree-item">
-              <div className="list-icon">{Icons.box}</div>
-              <div style={{flex:1}}>
-                <b>{b.name}</b>
-                <small>{b.items}件</small>
-              </div>
-              {Icons.chevronR}
-            </div>
-          ))}
-          <button className="btn btn-outline" style={{marginTop:4}}>{Icons.plus} 添加盒子</button>
-        </div>
-      </div>
-    );
+  if (view.startsWith('boxes:')) {
+    const lid = parseInt(view.split(':')[1]);
+    const boxes = data.layerBoxes[lid] || [];
+    return /*#__PURE__*/React.createElement("div", {
+      className: "scroll-area"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "content"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "breadcrumb"
+    }, /*#__PURE__*/React.createElement("span", {
+      onClick: () => setView('cabinets')
+    }, "空间"), " › ", /*#__PURE__*/React.createElement("span", {
+      onClick: () => setView('layers:' + (selCabinet?.id || 1))
+    }, selCabinet?.name || '柜子'), " › ", /*#__PURE__*/React.createElement("b", null, selLayer?.name || '层')), boxes.map(b => /*#__PURE__*/React.createElement("div", {
+      key: b.id,
+      className: "tree-item"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "list-icon"
+    }, Icons.box), /*#__PURE__*/React.createElement("div", {
+      style: {
+        flex: 1
+      }
+    }, /*#__PURE__*/React.createElement("b", null, b.name), /*#__PURE__*/React.createElement("small", null, b.items, "件")), Icons.chevronR)), /*#__PURE__*/React.createElement("button", {
+      className: "btn btn-outline",
+      style: {
+        marginTop: 4
+      }
+    }, Icons.plus, " 添加盒子")));
   }
-
   return null;
 }
 
 // ======== PROFILE SCREEN ========
-function ProfileScreen({onNavigate}){
-  return (
-    <div className="scroll-area">
-      <div className="content">
-        <div className="hero-card" style={{display:'flex',alignItems:'center',gap:14}}>
-          <div style={{width:56,height:56,borderRadius:18,background:'rgba(255,255,255,.25)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:24,fontWeight:800}}>
-            {data.profile.name[0]}
-          </div>
-          <div>
-            <h2 style={{fontSize:20}}>{data.profile.name}</h2>
-            <p>{data.profile.role} · {data.profile.plan}</p>
-          </div>
-          <div style={{marginLeft:'auto'}}>{Icons.edit}</div>
-        </div>
-
-        <div className="card">
-          <div className="setting-row" onClick={()=>onNavigate('records')}>
-            <div className="setting-icon">{Icons.list}</div>
-            <div className="setting-text"><b>出入库记录</b><small>消耗、补货、移动</small></div>
-            <div className="setting-arrow">›</div>
-          </div>
-          <div className="setting-row" onClick={()=>onNavigate('qrcode')}>
-            <div className="setting-icon">{Icons.qr}</div>
-            <div className="setting-text"><b>二维码管理</b><small>绑定、生成、打印</small></div>
-            <div className="setting-arrow">›</div>
-          </div>
-          <div className="setting-row">
-            <div className="setting-icon">{Icons.settings}</div>
-            <div className="setting-text"><b>偏好设置</b><small>主题、提醒、默认视图</small></div>
-            <div className="setting-arrow">›</div>
-          </div>
-          <div className="setting-row">
-            <div className="setting-icon">{Icons.export}</div>
-            <div className="setting-text"><b>导入导出</b><small>备份与迁移</small></div>
-            <div className="setting-arrow">›</div>
-          </div>
-        </div>
-
-        <div className="section-head"><b>数据概览</b></div>
-        <div className="stats-row card">
-          <div className="stat-item"><b>{data.summary.total}</b><span>物品</span></div>
-          <div className="stat-item"><b>{data.summary.boxes}</b><span>盒子</span></div>
-          <div className="stat-item"><b>{data.summary.cabinets}</b><span>柜子</span></div>
-        </div>
-      </div>
-    </div>
-  );
+function ProfileScreen({
+  onNavigate
+}) {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "scroll-area"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "content"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "hero-card",
+    style: {
+      display: 'flex',
+      alignItems: 'center',
+      gap: 14
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 56,
+      height: 56,
+      borderRadius: 18,
+      background: 'rgba(255,255,255,.25)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      fontSize: 24,
+      fontWeight: 800
+    }
+  }, data.profile.name[0]), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", {
+    style: {
+      fontSize: 20
+    }
+  }, data.profile.name), /*#__PURE__*/React.createElement("p", null, data.profile.role, " · ", data.profile.plan)), /*#__PURE__*/React.createElement("div", {
+    style: {
+      marginLeft: 'auto'
+    }
+  }, Icons.edit)), /*#__PURE__*/React.createElement("div", {
+    className: "card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "setting-row",
+    onClick: () => onNavigate('records')
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "setting-icon"
+  }, Icons.list), /*#__PURE__*/React.createElement("div", {
+    className: "setting-text"
+  }, /*#__PURE__*/React.createElement("b", null, "出入库记录"), /*#__PURE__*/React.createElement("small", null, "消耗、补货、移动")), /*#__PURE__*/React.createElement("div", {
+    className: "setting-arrow"
+  }, "›")), /*#__PURE__*/React.createElement("div", {
+    className: "setting-row",
+    onClick: () => onNavigate('qrcode')
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "setting-icon"
+  }, Icons.qr), /*#__PURE__*/React.createElement("div", {
+    className: "setting-text"
+  }, /*#__PURE__*/React.createElement("b", null, "二维码管理"), /*#__PURE__*/React.createElement("small", null, "绑定、生成、打印")), /*#__PURE__*/React.createElement("div", {
+    className: "setting-arrow"
+  }, "›")), /*#__PURE__*/React.createElement("div", {
+    className: "setting-row"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "setting-icon"
+  }, Icons.settings), /*#__PURE__*/React.createElement("div", {
+    className: "setting-text"
+  }, /*#__PURE__*/React.createElement("b", null, "偏好设置"), /*#__PURE__*/React.createElement("small", null, "主题、提醒、默认视图")), /*#__PURE__*/React.createElement("div", {
+    className: "setting-arrow"
+  }, "›")), /*#__PURE__*/React.createElement("div", {
+    className: "setting-row"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "setting-icon"
+  }, Icons.export), /*#__PURE__*/React.createElement("div", {
+    className: "setting-text"
+  }, /*#__PURE__*/React.createElement("b", null, "导入导出"), /*#__PURE__*/React.createElement("small", null, "备份与迁移")), /*#__PURE__*/React.createElement("div", {
+    className: "setting-arrow"
+  }, "›"))), /*#__PURE__*/React.createElement("div", {
+    className: "section-head"
+  }, /*#__PURE__*/React.createElement("b", null, "数据概览")), /*#__PURE__*/React.createElement("div", {
+    className: "stats-row card"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "stat-item"
+  }, /*#__PURE__*/React.createElement("b", null, data.summary.total), /*#__PURE__*/React.createElement("span", null, "物品")), /*#__PURE__*/React.createElement("div", {
+    className: "stat-item"
+  }, /*#__PURE__*/React.createElement("b", null, data.summary.boxes), /*#__PURE__*/React.createElement("span", null, "盒子")), /*#__PURE__*/React.createElement("div", {
+    className: "stat-item"
+  }, /*#__PURE__*/React.createElement("b", null, data.summary.cabinets), /*#__PURE__*/React.createElement("span", null, "柜子")))));
 }
 
 // ======== RECORDS SCREEN ========
-function RecordsScreen(){
-  return (
-    <div className="scroll-area">
-      <div className="content">
-        <div className="section-head"><b>出入库记录</b></div>
-        <div className="card" style={{padding:'0 14px'}}>
-          {data.records.map(r=>(
-            <div key={r.id} className="list-item">
-              <div className="list-icon">{r.action==='消耗'?Icons.minus:r.action==='补货'?Icons.plus:r.action==='移动'?Icons.edit:Icons.plus}</div>
-              <div className="list-info">
-                <b>{r.item}</b>
-                <small>{r.loc}</small>
-              </div>
-              <div className="list-right">
-                <div style={{fontWeight:700,color:r.qty>0?'var(--green)':r.qty<0?'var(--red)':''}}>
-                  {r.qty>0?'+':''}{r.qty!==0?r.qty:''}
-                </div>
-                <small style={{color:'var(--muted)'}}>{r.time}</small>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+function RecordsScreen() {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "scroll-area"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "content"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "section-head"
+  }, /*#__PURE__*/React.createElement("b", null, "出入库记录")), /*#__PURE__*/React.createElement("div", {
+    className: "card",
+    style: {
+      padding: '0 14px'
+    }
+  }, data.records.map(r => /*#__PURE__*/React.createElement("div", {
+    key: r.id,
+    className: "list-item"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "list-icon"
+  }, r.action === '消耗' ? Icons.minus : r.action === '补货' ? Icons.plus : r.action === '移动' ? Icons.edit : Icons.plus), /*#__PURE__*/React.createElement("div", {
+    className: "list-info"
+  }, /*#__PURE__*/React.createElement("b", null, r.item), /*#__PURE__*/React.createElement("small", null, r.loc)), /*#__PURE__*/React.createElement("div", {
+    className: "list-right"
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      fontWeight: 700,
+      color: r.qty > 0 ? 'var(--green)' : r.qty < 0 ? 'var(--red)' : ''
+    }
+  }, r.qty > 0 ? '+' : '', r.qty !== 0 ? r.qty : ''), /*#__PURE__*/React.createElement("small", {
+    style: {
+      color: 'var(--muted)'
+    }
+  }, r.time)))))));
 }
 
 // ======== QRCODE SCREEN ========
-function QRCodeScreen(){
-  return (
-    <div className="scroll-area">
-      <div className="content">
-        <div className="section-head"><b>二维码管理</b><a>{Icons.plus} 生成</a></div>
-        <div className="qr-grid">
-          {[
-            {name:"书房 A 柜",type:"柜子"},
-            {name:"蓝盒",type:"盒子"},
-            {name:"温莎牛顿颜料",type:"物品"},
-            {name:"工具柜",type:"柜子"},
-          ].map((q,i)=>(
-            <div key={i} className="qr-item">
-              <div className="qr-block"/>
-              <b style={{fontSize:12}}>{q.name}</b>
-              <small style={{color:'var(--muted)',fontSize:10}}>{q.type}</small>
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+function QRCodeScreen() {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "scroll-area"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "content"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "section-head"
+  }, /*#__PURE__*/React.createElement("b", null, "二维码管理"), /*#__PURE__*/React.createElement("a", null, Icons.plus, " 生成")), /*#__PURE__*/React.createElement("div", {
+    className: "qr-grid"
+  }, [{
+    name: "书房 A 柜",
+    type: "柜子"
+  }, {
+    name: "蓝盒",
+    type: "盒子"
+  }, {
+    name: "温莎牛顿颜料",
+    type: "物品"
+  }, {
+    name: "工具柜",
+    type: "柜子"
+  }].map((q, i) => /*#__PURE__*/React.createElement("div", {
+    key: i,
+    className: "qr-item"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "qr-block"
+  }), /*#__PURE__*/React.createElement("b", {
+    style: {
+      fontSize: 12
+    }
+  }, q.name), /*#__PURE__*/React.createElement("small", {
+    style: {
+      color: 'var(--muted)',
+      fontSize: 10
+    }
+  }, q.type))))));
 }
 
 // ======== SCAN SCREEN ========
-function ScanScreen(){
-  return (
-    <div style={{flex:1,display:'flex',flexDirection:'column',alignItems:'center',justifyContent:'center',gap:16}}>
-      <div style={{width:180,height:180,border:'1px dashed #b8ccc6',borderRadius:20,display:'flex',alignItems:'center',justifyContent:'center'}}>
-        <div style={{width:120,height:120,border:'1px solid #d8e6e2',borderRadius:8}}/>
-      </div>
-      <p style={{fontSize:13,color:'var(--muted)'}}>对准二维码</p>
-    </div>
-  );
+function ScanScreen() {
+  return /*#__PURE__*/React.createElement("div", {
+    style: {
+      flex: 1,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 16
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 180,
+      height: 180,
+      border: '1px dashed #b8ccc6',
+      borderRadius: 20,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center'
+    }
+  }, /*#__PURE__*/React.createElement("div", {
+    style: {
+      width: 120,
+      height: 120,
+      border: '1px solid #d8e6e2',
+      borderRadius: 8
+    }
+  })), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 13,
+      color: 'var(--muted)'
+    }
+  }, "对准二维码"));
 }
 
 // ======== LOGIN SCREEN ========
-function LoginScreen({onSkip}){
-  return (
-    <div className="login-page">
-      <div className="login-logo">家</div>
-      <h2 style={{fontSize:22,fontWeight:700}}>家庭仓库</h2>
-      <p style={{fontSize:12,color:'var(--muted)',textAlign:'center'}}>扫码、定位、消耗、补货<br/>一套管住家里物品</p>
-      <div className="form-stack" style={{width:'100%'}}>
-        <input className="input-field" placeholder="手机号" defaultValue="138****8888"/>
-        <input className="input-field" type="password" placeholder="密码" defaultValue="········"/>
-        <button className="btn btn-primary" style={{marginTop:8}}>登录</button>
-      </div>
-      <a style={{fontSize:12,color:'var(--brand)',cursor:'pointer'}} onClick={onSkip}>跳过登录 →</a>
-    </div>
-  );
+function LoginScreen({
+  onSkip
+}) {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "login-page"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "login-logo"
+  }, "家"), /*#__PURE__*/React.createElement("h2", {
+    style: {
+      fontSize: 22,
+      fontWeight: 700
+    }
+  }, "家庭仓库"), /*#__PURE__*/React.createElement("p", {
+    style: {
+      fontSize: 12,
+      color: 'var(--muted)',
+      textAlign: 'center'
+    }
+  }, "扫码、定位、消耗、补货", /*#__PURE__*/React.createElement("br", null), "一套管住家里物品"), /*#__PURE__*/React.createElement("div", {
+    className: "form-stack",
+    style: {
+      width: '100%'
+    }
+  }, /*#__PURE__*/React.createElement("input", {
+    className: "input-field",
+    placeholder: "手机号",
+    defaultValue: "138****8888"
+  }), /*#__PURE__*/React.createElement("input", {
+    className: "input-field",
+    type: "password",
+    placeholder: "密码",
+    defaultValue: "········"
+  }), /*#__PURE__*/React.createElement("button", {
+    className: "btn btn-primary",
+    style: {
+      marginTop: 8
+    }
+  }, "登录")), /*#__PURE__*/React.createElement("a", {
+    style: {
+      fontSize: 12,
+      color: 'var(--brand)',
+      cursor: 'pointer'
+    },
+    onClick: onSkip
+  }, "跳过登录 →"));
 }
 
 // ======== APP PHONE ========
-function AppPhone({initialTab}){
-  const [tab,setTab]=useState(initialTab||'home');
-  const [screen,setScreen]=useState('login');
-  const [screenParams,setScreenParams]=useState(null);
-  const [navStack,setNavStack]=useState([]);
-
-  const navigate = (s,p) => {
-    if(s==='items'||s==='space'){
-      setTab(s==='items'?'items':'space');
+function AppPhone({
+  initialTab
+}) {
+  const [tab, setTab] = useState(initialTab || 'home');
+  const [screen, setScreen] = useState('login');
+  const [screenParams, setScreenParams] = useState(null);
+  const [navStack, setNavStack] = useState([]);
+  const navigate = (s, p) => {
+    if (s === 'items' || s === 'space') {
+      setTab(s === 'items' ? 'items' : 'space');
       setScreen('main');
       setScreenParams(p);
       setNavStack([]);
-    }else if(s==='item-detail'||s==='item-form'||s==='records'||s==='qrcode'||s==='scan'){
-      setNavStack(prev=>[...prev,{screen:s,params:p}]);
+    } else if (s === 'item-detail' || s === 'item-form' || s === 'records' || s === 'qrcode' || s === 'scan') {
+      setNavStack(prev => [...prev, {
+        screen: s,
+        params: p
+      }]);
       setScreen(s);
       setScreenParams(p);
     }
   };
-
   const goBack = () => {
-    if(navStack.length>0){
-      const prev=navStack[navStack.length-1];
-      setNavStack(navStack.slice(0,-1));
+    if (navStack.length > 0) {
+      const prev = navStack[navStack.length - 1];
+      setNavStack(navStack.slice(0, -1));
       setScreen(prev.screen);
       setScreenParams(prev.params);
-    }else{
+    } else {
       setScreen('main');
       setScreenParams(null);
     }
   };
-
   const getTitle = () => {
-    if(screen==='item-detail') return '物品详情';
-    if(screen==='item-form') return '新增物品';
-    if(screen==='records') return '出入库记录';
-    if(screen==='qrcode') return '二维码管理';
-    if(screen==='scan') return '扫码';
-    if(screen==='login') return '';
-    if(tab==='home') return '首页';
-    if(tab==='items') return '物品';
-    if(tab==='space') return '空间';
-    if(tab==='me') return '我的';
+    if (screen === 'item-detail') return '物品详情';
+    if (screen === 'item-form') return '新增物品';
+    if (screen === 'records') return '出入库记录';
+    if (screen === 'qrcode') return '二维码管理';
+    if (screen === 'scan') return '扫码';
+    if (screen === 'login') return '';
+    if (tab === 'home') return '首页';
+    if (tab === 'items') return '物品';
+    if (tab === 'space') return '空间';
+    if (tab === 'me') return '我的';
     return '';
   };
-
-  const showNav = screen!=='main'||tab==='home';
-  const showBack = screen!=='main' && screen!=='login';
-
-  if(screen==='login'){
-    return (
-      <div className="phone">
-        <div className="screen">
-          <div className="status-bar"><b>09:41</b><span>5G &nbsp;82%</span></div>
-          <LoginScreen onSkip={()=>{setScreen('main');setNavStack([])}}/>
-        </div>
-      </div>
-    );
+  const showNav = screen !== 'main' || tab === 'home';
+  const showBack = screen !== 'main' && screen !== 'login';
+  if (screen === 'login') {
+    return /*#__PURE__*/React.createElement("div", {
+      className: "phone"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "screen"
+    }, /*#__PURE__*/React.createElement("div", {
+      className: "status-bar"
+    }, /*#__PURE__*/React.createElement("b", null, "09:41"), /*#__PURE__*/React.createElement("span", null, "5G \xA082%")), /*#__PURE__*/React.createElement(LoginScreen, {
+      onSkip: () => {
+        setScreen('main');
+        setNavStack([]);
+      }
+    })));
   }
-
-  return (
-    <div className="phone">
-      <div className="screen">
-        <div className="status-bar"><b>09:41</b><span>5G &nbsp;82%</span></div>
-        {showNav && (
-          <div className="nav-bar">
-            {showBack && <button className="back-btn" onClick={goBack}>{Icons.chevronL}</button>}
-            <span className="title">{getTitle()}</span>
-            {screen==='main' && tab==='space' && <button className="action">搜索</button>}
-          </div>
-        )}
-
-        {screen==='main' && tab==='home' && <HomeScreen onNavigate={navigate}/>}
-        {screen==='main' && tab==='items' && <ItemsScreen onNavigate={navigate} filter={screenParams}/>}
-        {screen==='main' && tab==='space' && <SpaceScreen onNavigate={navigate}/>}
-        {screen==='main' && tab==='me' && <ProfileScreen onNavigate={navigate}/>}
-        {screen==='item-detail' && <ItemDetail itemId={screenParams} onNavigate={navigate}/>}
-        {screen==='item-form' && <ItemForm/>}
-        {screen==='records' && <RecordsScreen/>}
-        {screen==='qrcode' && <QRCodeScreen/>}
-        {screen==='scan' && <ScanScreen/>}
-
-        <div className="tab-bar">
-          <button className={"tab-item"+(tab==='home'?' active':'')} onClick={()=>{setTab('home');setScreen('main');setNavStack([])}}>
-            {Icons.home}<span>首页</span>
-          </button>
-          <button className={"tab-item"+(tab==='items'?' active':'')} onClick={()=>{setTab('items');setScreen('main');setNavStack([])}}>
-            {Icons.box}<span>物品</span>
-          </button>
-          <div className="tab-scan-slot">
-            <button className="tab-scan-btn" onClick={()=>navigate('scan')}>{Icons.scan}</button>
-          </div>
-          <button className={"tab-item"+(tab==='space'?' active':'')} onClick={()=>{setTab('space');setScreen('main');setNavStack([])}}>
-            {Icons.cabinet}<span>空间</span>
-          </button>
-          <button className={"tab-item"+(tab==='me'?' active':'')} onClick={()=>{setTab('me');setScreen('main');setNavStack([])}}>
-            {Icons.user}<span>我的</span>
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+  return /*#__PURE__*/React.createElement("div", {
+    className: "phone"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "screen"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "status-bar"
+  }, /*#__PURE__*/React.createElement("b", null, "09:41"), /*#__PURE__*/React.createElement("span", null, "5G \xA082%")), showNav && /*#__PURE__*/React.createElement("div", {
+    className: "nav-bar"
+  }, showBack && /*#__PURE__*/React.createElement("button", {
+    className: "back-btn",
+    onClick: goBack
+  }, Icons.chevronL), /*#__PURE__*/React.createElement("span", {
+    className: "title"
+  }, getTitle()), screen === 'main' && tab === 'space' && /*#__PURE__*/React.createElement("button", {
+    className: "action"
+  }, "搜索")), screen === 'main' && tab === 'home' && /*#__PURE__*/React.createElement(HomeScreen, {
+    onNavigate: navigate
+  }), screen === 'main' && tab === 'items' && /*#__PURE__*/React.createElement(ItemsScreen, {
+    onNavigate: navigate,
+    filter: screenParams
+  }), screen === 'main' && tab === 'space' && /*#__PURE__*/React.createElement(SpaceScreen, {
+    onNavigate: navigate
+  }), screen === 'main' && tab === 'me' && /*#__PURE__*/React.createElement(ProfileScreen, {
+    onNavigate: navigate
+  }), screen === 'item-detail' && /*#__PURE__*/React.createElement(ItemDetail, {
+    itemId: screenParams,
+    onNavigate: navigate
+  }), screen === 'item-form' && /*#__PURE__*/React.createElement(ItemForm, null), screen === 'records' && /*#__PURE__*/React.createElement(RecordsScreen, null), screen === 'qrcode' && /*#__PURE__*/React.createElement(QRCodeScreen, null), screen === 'scan' && /*#__PURE__*/React.createElement(ScanScreen, null), /*#__PURE__*/React.createElement("div", {
+    className: "tab-bar"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "tab-item" + (tab === 'home' ? ' active' : ''),
+    onClick: () => {
+      setTab('home');
+      setScreen('main');
+      setNavStack([]);
+    }
+  }, Icons.home, /*#__PURE__*/React.createElement("span", null, "首页")), /*#__PURE__*/React.createElement("button", {
+    className: "tab-item" + (tab === 'items' ? ' active' : ''),
+    onClick: () => {
+      setTab('items');
+      setScreen('main');
+      setNavStack([]);
+    }
+  }, Icons.box, /*#__PURE__*/React.createElement("span", null, "物品")), /*#__PURE__*/React.createElement("div", {
+    className: "tab-scan-slot"
+  }, /*#__PURE__*/React.createElement("button", {
+    className: "tab-scan-btn",
+    onClick: () => navigate('scan')
+  }, Icons.scan)), /*#__PURE__*/React.createElement("button", {
+    className: "tab-item" + (tab === 'space' ? ' active' : ''),
+    onClick: () => {
+      setTab('space');
+      setScreen('main');
+      setNavStack([]);
+    }
+  }, Icons.cabinet, /*#__PURE__*/React.createElement("span", null, "空间")), /*#__PURE__*/React.createElement("button", {
+    className: "tab-item" + (tab === 'me' ? ' active' : ''),
+    onClick: () => {
+      setTab('me');
+      setScreen('main');
+      setNavStack([]);
+    }
+  }, Icons.user, /*#__PURE__*/React.createElement("span", null, "我的")))));
 }
 
 // ======== MAIN ========
-function App(){
-  const phones=[
-    {id:1,label:'首页 · Home',tab:'home'},
-    {id:2,label:'物品 · Items',tab:'items'},
-    {id:3,label:'空间 · Spaces',tab:'space'},
-    {id:4,label:'我的 · Profile',tab:'me'},
-  ];
-
-  return phones.map(p=>(
-    <div key={p.id} className="tile">
-      <div className="tile-label">{p.label}</div>
-      <AppPhone initialTab={p.tab}/>
-    </div>
-  ));
+function App() {
+  const phones = [{
+    id: 1,
+    label: '首页 · Home',
+    tab: 'home'
+  }, {
+    id: 2,
+    label: '物品 · Items',
+    tab: 'items'
+  }, {
+    id: 3,
+    label: '空间 · Spaces',
+    tab: 'space'
+  }, {
+    id: 4,
+    label: '我的 · Profile',
+    tab: 'me'
+  }];
+  return phones.map(p => /*#__PURE__*/React.createElement("div", {
+    key: p.id,
+    className: "tile"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "tile-label"
+  }, p.label), /*#__PURE__*/React.createElement(AppPhone, {
+    initialTab: p.tab
+  })));
 }
+ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null));
 
-ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
 </script>
 </body>
 </html>
