@@ -4,9 +4,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>家庭仓库 — Huashu Redesign</title>
-<script src="react.production.min.js"></script>
-<script src="react-dom.production.min.js"></script>
-
 <style>
 :root{
   --bg:#f3f7f5; --screen-bg:#f8fbfa; --card:#fff; --ink:#1a232e;
@@ -21,11 +18,13 @@ body{
   background:linear-gradient(170deg,#e4f3f0 0%,#f0f7f5 40%,#f8fbfa 100%);
   color:var(--ink);min-height:100vh;padding:28px 20px;
 }
-h1{text-align:center;font-size:22px;font-weight:720;letter-spacing:-.3px;color:#162530;margin-bottom:6px}
+h1{text-align:center;font-size:22px;font-weight:720;letter-spacing:-.3px;color:#162530;margin-bottom:4px}
 .sub{text-align:center;font-size:12px;color:var(--muted);margin-bottom:28px}
+
 .tile-grid{display:flex;gap:28px;flex-wrap:wrap;justify-content:center;max-width:1400px;margin:0 auto}
 .tile{display:flex;flex-direction:column;align-items:center;gap:10px}
-.tile-label{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.8px}
+.tile-label{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.8px}
+
 .phone{
   width:var(--phone-w);height:var(--phone-h);
   background:#0b1020;border-radius:28px;padding:10px;
@@ -41,12 +40,12 @@ h1{text-align:center;font-size:22px;font-weight:720;letter-spacing:-.3px;color:#
   overflow:hidden;display:flex;flex-direction:column;
   box-shadow:inset 0 0 0 1px rgba(255,255,255,.35);
 }
+
 .status-bar{
   height:30px;display:flex;align-items:center;justify-content:space-between;
   padding:0 20px;background:rgba(255,255,255,.7);backdrop-filter:blur(14px);
   font-size:11px;font-weight:620;flex-shrink:0;color:#1a2a34;
 }
-.status-bar svg{width:13px;height:13px}
 .nav-bar{
   height:46px;display:flex;align-items:center;gap:10px;padding:0 14px;
   background:rgba(255,255,255,.75);backdrop-filter:blur(16px);
@@ -54,26 +53,29 @@ h1{text-align:center;font-size:22px;font-weight:720;letter-spacing:-.3px;color:#
 }
 .nav-bar .back-btn{
   width:30px;height:30px;border-radius:14px;background:rgba(53,169,154,.1);
-  display:flex;align-items:center;justify-content:center;cursor:pointer;
-  color:var(--brand);flex-shrink:0;border:none;font-size:16px;
+  display:none;align-items:center;justify-content:center;cursor:pointer;
+  color:var(--brand);border:none;font-size:16px;flex-shrink:0;
 }
+.nav-bar .back-btn.visible{display:flex}
 .nav-bar .title{font-size:15px;font-weight:680;letter-spacing:-.2px;flex:1}
-.nav-bar .action{font-size:12px;color:var(--brand);font-weight:620;cursor:pointer;border:none;background:none}
-.scroll-area{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.nav-bar .action{font-size:12px;color:var(--brand);font-weight:620;cursor:pointer;border:none;background:none;display:none}
+
+.scroll-area{flex:1;overflow-y:auto}
 .scroll-area::-webkit-scrollbar{display:none}
-.content{padding:12px 14px 80px;display:flex;flex-direction:column;gap:12px}
+.page-content{padding:12px 14px 80px;display:flex;flex-direction:column;gap:12px}
+
 .tab-bar{
   height:54px;display:flex;align-items:center;
   background:rgba(255,255,255,.88);backdrop-filter:blur(20px);
   border-top:1px solid rgba(0,0,0,.04);flex-shrink:0;position:relative;
 }
-.tab-item{
+.tab-btn{
   flex:1;display:flex;flex-direction:column;align-items:center;gap:1px;
   font-size:9px;color:#9aaab6;font-weight:550;cursor:pointer;
   border:none;background:none;padding:6px 0;
 }
-.tab-item.active{color:var(--brand)}
-.tab-item svg{width:18px;height:18px}
+.tab-btn.active{color:var(--brand)}
+.tab-btn svg{width:18px;height:18px}
 .tab-scan-slot{flex:0 0 56px;display:flex;justify-content:center;position:relative}
 .tab-scan-btn{
   width:48px;height:48px;border-radius:22px;
@@ -83,6 +85,8 @@ h1{text-align:center;font-size:22px;font-weight:720;letter-spacing:-.3px;color:#
   color:#fff;cursor:pointer;border:none;position:absolute;bottom:-2px;
 }
 .tab-scan-btn svg{width:22px;height:22px}
+
+/* Cards */
 .card{background:var(--card);border-radius:18px;padding:14px;box-shadow:var(--soft);border:1px solid var(--line)}
 .hero-card{
   background:linear-gradient(135deg,#2aa395,#62b5f2);color:#fff;
@@ -90,13 +94,17 @@ h1{text-align:center;font-size:22px;font-weight:720;letter-spacing:-.3px;color:#
 }
 .hero-card h2{font-size:24px;font-weight:720;letter-spacing:-.5px}
 .hero-card p{font-size:11px;opacity:.84;margin-top:4px}
+.hero-card .sm{font-size:10px;opacity:.7}
+
 .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .stat-item{text-align:center;padding:10px 4px;cursor:pointer}
-.stat-item b{display:block;font-size:20px;font-weight:720;color:var(--ink)}
+.stat-item b{display:block;font-size:20px;font-weight:720}
 .stat-item span{font-size:10px;color:var(--muted)}
+
 .section-head{display:flex;align-items:center;justify-content:space-between;margin:4px 0 -2px}
-.section-head b{font-size:14px;font-weight:700;color:var(--ink)}
-.section-head a{font-size:11px;color:var(--brand);cursor:pointer;border:none;background:none;font-weight:600}
+.section-head b{font-size:14px;font-weight:700}
+.section-head a{font-size:11px;color:var(--brand);cursor:pointer;font-weight:600}
+
 .list-item{
   display:flex;align-items:center;gap:12px;padding:12px 0;
   border-bottom:1px solid var(--line);cursor:pointer;
@@ -104,31 +112,32 @@ h1{text-align:center;font-size:22px;font-weight:720;letter-spacing:-.3px;color:#
 .list-item:last-child{border-bottom:none}
 .list-icon{
   width:38px;height:38px;border-radius:12px;background:#e7f6f3;
-  display:flex;align-items:center;justify-content:center;flex-shrink:0;
-  color:var(--brand);font-size:18px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--brand);
 }
+.list-icon svg{width:18px;height:18px}
 .list-info{flex:1;min-width:0}
 .list-info b{display:block;font-size:14px;font-weight:600}
 .list-info small{display:block;font-size:11px;color:var(--muted);margin-top:2px}
 .list-right{text-align:right;flex-shrink:0}
-.tag{
-  display:inline-block;padding:3px 8px;border-radius:8px;font-size:10px;font-weight:650;
-}
+
+.tag{padding:3px 8px;border-radius:8px;font-size:10px;font-weight:650}
 .tag.ok{background:#e7f7f2;color:var(--green)}
 .tag.warn{background:#fff5e4;color:#cb8118}
 .tag.bad{background:#fff0f2;color:#d9535c}
-.tag.brand{background:#e2f5f3;color:var(--brand)}
+
 .search-bar{
   display:flex;align-items:center;gap:8px;background:#f2f7f5;
   border-radius:14px;padding:10px 14px;font-size:12px;color:var(--muted);
 }
+
 .btn{
-  width:100%;border:none;border-radius:14px;padding:12px;font-size:14px;font-weight:620;
+  border:none;border-radius:14px;padding:12px;font-size:14px;font-weight:620;
   cursor:pointer;text-align:center;display:flex;align-items:center;justify-content:center;gap:6px;
 }
-.btn-primary{background:linear-gradient(135deg,#2aa395,#58b0e8);color:#fff;box-shadow:0 8px 20px rgba(42,163,149,.22)}
+.btn-primary{background:linear-gradient(135deg,#2aa395,#58b0e8);color:#fff;box-shadow:0 8px 20px rgba(42,163,149,.22);width:100%}
 .btn-outline{background:#fff;color:var(--brand);border:1px solid var(--brand)}
 .btn-danger{background:#fff0f2;color:#d9535c;border:1px solid #fdd}
+
 .action-row{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 .action-tile{
   background:var(--card);border:1px solid var(--line);border-radius:16px;
@@ -138,30 +147,64 @@ h1{text-align:center;font-size:22px;font-weight:720;letter-spacing:-.3px;color:#
 .action-tile svg{color:var(--brand);width:22px;height:22px}
 .action-tile b{font-size:13px;font-weight:650}
 .action-tile small{font-size:10px;color:var(--muted)}
+
 .quick-row{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .quick-btn{
   aspect-ratio:1;background:#f4f9f7;border-radius:16px;
   display:flex;align-items:center;justify-content:center;cursor:pointer;
-  font-size:12px;font-weight:600;color:var(--ink);border:none;
+  font-size:12px;font-weight:600;border:none;
 }
+
 .tree-item{
   display:flex;align-items:center;gap:10px;padding:12px;
   background:var(--card);border:1px solid var(--line);border-radius:14px;
   cursor:pointer;box-shadow:var(--soft);
 }
-.tree-item b{font-size:14px;flex:1}
+.tree-item b{font-size:14px}
 .tree-item small{font-size:10px;color:var(--muted)}
+.tree-body{flex:1}
 .progress-bar{
   height:4px;border-radius:2px;background:#e8f0ed;margin-top:8px;
 }
 .progress-bar .fill{height:100%;border-radius:2px;background:var(--green)}
 .progress-bar .fill.warn{background:var(--orange)}
 .progress-bar .fill.bad{background:var(--red)}
+
 .breadcrumb{
   display:flex;align-items:center;gap:4px;font-size:11px;color:var(--muted);
   padding:0 0 4px;flex-wrap:wrap;
 }
 .breadcrumb span{cursor:pointer;color:var(--brand)}
+
+.chip-row{display:flex;gap:6px;flex-wrap:wrap}
+.chip{
+  padding:6px 12px;border-radius:99px;font-size:11px;font-weight:600;cursor:pointer;
+  background:#eef7f4;color:#507d74;border:none;
+}
+.chip.active{background:var(--brand);color:#fff}
+
+.detail-hero{
+  background:linear-gradient(135deg,#f9fdfc,#eef8f5);
+  border:1px solid var(--line);border-radius:18px;padding:16px;text-align:center;
+}
+.detail-hero h2{font-size:18px;font-weight:680}
+.detail-hero .count{font-size:32px;font-weight:750;color:var(--brand);margin:4px 0}
+
+.info-row{
+  display:flex;justify-content:space-between;padding:8px 0;
+  border-bottom:1px solid var(--line);font-size:12px;
+}
+.info-row:last-child{border-bottom:none}
+.info-row .k{color:var(--muted)}
+.info-row .v{font-weight:600}
+
+.form-stack{display:flex;flex-direction:column;gap:12px}
+.form-label{font-size:12px;font-weight:600;margin-bottom:2px}
+.input-field{
+  width:100%;border:1px solid var(--line);border-radius:12px;
+  padding:10px 14px;font-size:14px;outline:none;background:#f9fbfa;
+}
+
 .setting-row{
   display:flex;align-items:center;gap:12px;padding:13px 0;
   border-bottom:1px solid var(--line);cursor:pointer;
@@ -171,1460 +214,338 @@ h1{text-align:center;font-size:22px;font-weight:720;letter-spacing:-.3px;color:#
   width:36px;height:36px;border-radius:12px;background:#e7f6f3;
   display:flex;align-items:center;justify-content:center;color:var(--brand);
 }
+.setting-icon svg{width:18px;height:18px}
 .setting-text{flex:1}
 .setting-text b{display:block;font-size:14px;font-weight:600}
 .setting-text small{display:block;font-size:10px;color:var(--muted);margin-top:2px}
 .setting-arrow{color:#bec7ce;font-size:18px}
-.chip-row{display:flex;gap:6px;flex-wrap:wrap}
-.chip{
-  padding:6px 12px;border-radius:99px;font-size:11px;font-weight:600;cursor:pointer;
-  background:#eef7f4;color:#507d74;border:none;
-}
-.chip.active{background:var(--brand);color:#fff}
+
 .qr-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .qr-item{
   background:var(--card);border:1px solid var(--line);border-radius:14px;
   padding:12px;text-align:center;box-shadow:var(--soft);
 }
-.qr-item .qr-block{
+.qr-block{
   width:56px;height:56px;margin:0 auto 8px;border-radius:10px;
   background:repeating-linear-gradient(45deg,#1a7a6e 0 4px,#fff 4px 8px);
 }
-.detail-hero{
-  background:linear-gradient(135deg,#f9fdfc,#eef8f5);
-  border:1px solid var(--line);border-radius:18px;padding:16px;
-  text-align:center;
-}
-.detail-hero h2{font-size:18px;font-weight:680}
-.detail-hero .count{font-size:32px;font-weight:750;color:var(--brand);margin:4px 0}
-.info-row{
-  display:flex;justify-content:space-between;padding:8px 0;
-  border-bottom:1px solid var(--line);font-size:12px;
-}
-.info-row:last-child{border-bottom:none}
-.info-row .k{color:var(--muted)}
-.info-row .v{font-weight:600}
-.input-field{
-  width:100%;border:1px solid var(--line);border-radius:12px;
-  padding:12px 14px;font-size:14px;outline:none;background:#f9fbfa;
-}
-.input-field:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(53,169,154,.1)}
-.form-stack{display:flex;flex-direction:column;gap:12px}
-.form-label{font-size:12px;font-weight:600;color:var(--ink);margin-bottom:2px}
-.login-page{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  padding:40px 30px;gap:20px;height:100%;
-}
-.login-logo{
-  width:64px;height:64px;border-radius:20px;
-  background:linear-gradient(135deg,var(--brand),var(--brand2));
-  display:flex;align-items:center;justify-content:center;color:#fff;font-size:28px;font-weight:800;
-}
-.empty-state{text-align:center;padding:40px 20px;color:var(--muted)}
-.modal-overlay{
-  position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.32);
-  z-index:50;display:flex;align-items:flex-end;justify-content:center;
-}
-.modal-sheet{
-  background:#fff;border-radius:22px 22px 0 0;width:100%;max-width:var(--phone-w);
-  max-height:70%;overflow-y:auto;padding:20px 16px 32px;animation:slideUp .25s ease;
-}
-@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
-.modal-sheet h3{font-size:16px;margin-bottom:14px;text-align:center}
+
+.record-action{font-weight:700;font-size:12px}
+.record-time{font-size:10px;color:var(--muted)}
+
+.page{display:none}
+.page.active{display:block}
 </style>
 </head>
 <body>
 <h1>家庭仓库</h1>
-<p class="sub">Huashu Redesign · 13 页 · 4 Tab · 薄荷青</p>
-<div class="tile-grid" id="root"></div>
+<p class="sub">Huashu Redesign · 4 Tab · 薄荷青</p>
+<div class="tile-grid">
 
 <script>
-const {
-  useState
-} = React;
-
-// ======== DATA ========
-const data = {
-  summary: {
-    total: 128,
-    expiring: 3,
-    lowStock: 5,
-    fullBoxes: 2,
-    cabinets: 4,
-    boxes: 18
-  },
-  recentItems: [{
-    id: 1,
-    name: "温莎牛顿 24色颜料",
-    loc: "书房A柜 / 2层 / 蓝盒",
-    qty: 3,
-    status: "expiring",
-    expireIn: 30
-  }, {
-    id: 2,
-    name: "8K 水彩纸",
-    loc: "工具柜 / 1层 / 纸盒",
-    qty: 1,
-    status: "low"
-  }, {
-    id: 3,
-    name: "3M 美纹纸胶带",
-    loc: "工具柜 / B盒",
-    qty: 4,
-    status: "ok"
-  }, {
-    id: 4,
-    name: "A4 素描纸",
-    loc: "书房A柜 / 3层",
-    qty: 20,
-    status: "ok"
-  }],
-  allItems: [{
-    id: 1,
-    name: "温莎牛顿 24色颜料",
-    cat: "画材",
-    loc: "书房A柜/2层/蓝盒",
-    qty: 3,
-    status: "expiring",
-    expireIn: 30
-  }, {
-    id: 2,
-    name: "8K 水彩纸",
-    cat: "纸张",
-    loc: "工具柜/1层/纸盒",
-    qty: 1,
-    status: "low"
-  }, {
-    id: 3,
-    name: "3M 美纹纸胶带",
-    cat: "工具",
-    loc: "工具柜/B盒",
-    qty: 4,
-    status: "ok"
-  }, {
-    id: 4,
-    name: "A4 素描纸",
-    cat: "纸张",
-    loc: "书房A柜/3层",
-    qty: 20,
-    status: "ok"
-  }, {
-    id: 5,
-    name: "辉柏嘉彩铅48色",
-    cat: "画材",
-    loc: "书房A柜/2层/绿盒",
-    qty: 1,
-    status: "ok"
-  }, {
-    id: 6,
-    name: "美工刀 大号",
-    cat: "工具",
-    loc: "工具柜/A盒",
-    qty: 2,
-    status: "ok"
-  }],
-  cabinets: [{
-    id: 1,
-    name: "书房 A 柜",
-    layers: 3,
-    boxes: 7,
-    items: 46,
-    capacity: "normal",
-    pct: 62
-  }, {
-    id: 2,
-    name: "工具柜",
-    layers: 2,
-    boxes: 5,
-    items: 31,
-    capacity: "full",
-    pct: 88
-  }, {
-    id: 3,
-    name: "储物间 C 柜",
-    layers: 2,
-    boxes: 4,
-    items: 28,
-    capacity: "normal",
-    pct: 54
-  }, {
-    id: 4,
-    name: "阳台杂物柜",
-    layers: 1,
-    boxes: 2,
-    items: 23,
-    capacity: "over",
-    pct: 95
-  }],
-  cabinetLayers: {
-    1: [{
-      id: 11,
-      name: "1层",
-      boxes: 3,
-      items: 18
-    }, {
-      id: 12,
-      name: "2层",
-      boxes: 2,
-      items: 16
-    }, {
-      id: 13,
-      name: "3层",
-      boxes: 2,
-      items: 12
-    }],
-    2: [{
-      id: 21,
-      name: "1层",
-      boxes: 3,
-      items: 21
-    }, {
-      id: 22,
-      name: "2层",
-      boxes: 2,
-      items: 10
-    }]
-  },
-  layerBoxes: {
-    11: [{
-      id: 111,
-      name: "蓝盒",
-      items: 8
-    }, {
-      id: 112,
-      name: "绿盒",
-      items: 6
-    }, {
-      id: 113,
-      name: "文具盒",
-      items: 4
-    }],
-    12: [{
-      id: 121,
-      name: "蓝盒",
-      items: 10
-    }, {
-      id: 122,
-      name: "木盒",
-      items: 6
-    }],
-    13: [{
-      id: 131,
-      name: "纸盒",
-      items: 8
-    }, {
-      id: 132,
-      name: "塑料盒",
-      items: 4
-    }],
-    21: [{
-      id: 211,
-      name: "A盒",
-      items: 12
-    }, {
-      id: 212,
-      name: "B盒",
-      items: 5
-    }, {
-      id: 213,
-      name: "零件盒",
-      items: 4
-    }],
-    22: [{
-      id: 221,
-      name: "大盒",
-      items: 7
-    }, {
-      id: 222,
-      name: "小盒",
-      items: 3
-    }]
-  },
-  categories: [{
-    id: 1,
-    name: "画材",
-    subs: ["颜料", "画笔", "画纸"]
-  }, {
-    id: 2,
-    name: "工具",
-    subs: ["切割", "测量", "胶带"]
-  }, {
-    id: 3,
-    name: "纸张",
-    subs: ["水彩纸", "素描纸", "卡纸"]
-  }],
-  records: [{
-    id: 1,
-    action: "消耗",
-    item: "温莎牛顿颜料",
-    qty: -1,
-    time: "今天 14:30",
-    loc: "书房A柜/2层/蓝盒"
-  }, {
-    id: 2,
-    action: "补货",
-    item: "A4 素描纸",
-    qty: 10,
-    time: "昨天 09:15",
-    loc: "书房A柜/3层"
-  }, {
-    id: 3,
-    action: "移动",
-    item: "3M 胶带",
-    qty: 0,
-    time: "6月8日",
-    loc: "工具柜/A盒 → B盒"
-  }, {
-    id: 4,
-    action: "新增",
-    item: "辉柏嘉彩铅",
-    qty: 1,
-    time: "6月7日",
-    loc: "书房A柜/2层/绿盒"
-  }],
-  profile: {
-    name: "曦曦",
-    role: "管理员",
-    plan: "个人版"
-  }
+// ======== SVG Icons ========
+var I = {
+  home:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>',
+  box:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>',
+  cabinet:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="2" width="16" height="20" rx="1"/><line x1="4" y1="10" x2="20" y2="10"/></svg>',
+  search:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>',
+  scan:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 7V5a2 2 0 012-2h2"/><path d="M17 3h2a2 2 0 012 2v2"/><path d="M21 17v2a2 2 0 01-2 2h-2"/><path d="M7 21H5a2 2 0 01-2-2v-2"/><line x1="7" y1="12" x2="17" y2="12"/></svg>',
+  user:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+  plus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+  minus:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="5" y1="12" x2="19" y2="12"/></svg>',
+  chevronR:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>',
+  chevronL:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>',
+  edit:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>',
+  settings:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 002.83-2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>',
+  list:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/></svg>',
+  qr:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>',
+  export:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
 };
 
-// ======== ICONS ========
-const Icons = {
-  home: /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "1.8",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("path", {
-    d: "M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"
-  }), /*#__PURE__*/React.createElement("polyline", {
-    points: "9 22 9 12 15 12 15 22"
-  })),
-  box: /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "1.8",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("path", {
-    d: "M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"
-  })),
-  cabinet: /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "1.8",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("rect", {
-    x: "4",
-    y: "2",
-    width: "16",
-    height: "20",
-    rx: "1"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "4",
-    y1: "10",
-    x2: "20",
-    y2: "10"
-  })),
-  search: /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "1.8",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("circle", {
-    cx: "11",
-    cy: "11",
-    r: "8"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "21",
-    y1: "21",
-    x2: "16.65",
-    y2: "16.65"
-  })),
-  scan: /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "1.8",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("path", {
-    d: "M3 7V5a2 2 0 012-2h2"
-  }), /*#__PURE__*/React.createElement("path", {
-    d: "M17 3h2a2 2 0 012 2v2"
-  }), /*#__PURE__*/React.createElement("path", {
-    d: "M21 17v2a2 2 0 01-2 2h-2"
-  }), /*#__PURE__*/React.createElement("path", {
-    d: "M7 21H5a2 2 0 01-2-2v-2"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "7",
-    y1: "12",
-    x2: "17",
-    y2: "12"
-  })),
-  user: /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "1.8",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("path", {
-    d: "M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"
-  }), /*#__PURE__*/React.createElement("circle", {
-    cx: "12",
-    cy: "7",
-    r: "4"
-  })),
-  plus: /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "1.8",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("line", {
-    x1: "12",
-    y1: "5",
-    x2: "12",
-    y2: "19"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "5",
-    y1: "12",
-    x2: "19",
-    y2: "12"
-  })),
-  minus: /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "1.8",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("line", {
-    x1: "5",
-    y1: "12",
-    x2: "19",
-    y2: "12"
-  })),
-  chevronR: /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "2",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("polyline", {
-    points: "9 18 15 12 9 6"
-  })),
-  chevronL: /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "2",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("polyline", {
-    points: "15 18 9 12 15 6"
-  })),
-  clock: /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "1.8",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("circle", {
-    cx: "12",
-    cy: "12",
-    r: "10"
-  }), /*#__PURE__*/React.createElement("polyline", {
-    points: "12 6 12 12 16 14"
-  })),
-  settings: /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "1.8",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("circle", {
-    cx: "12",
-    cy: "12",
-    r: "3"
-  }), /*#__PURE__*/React.createElement("path", {
-    d: "M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 002.83-2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"
-  })),
-  list: /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "1.8",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("line", {
-    x1: "8",
-    y1: "6",
-    x2: "21",
-    y2: "6"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "8",
-    y1: "12",
-    x2: "21",
-    y2: "12"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "8",
-    y1: "18",
-    x2: "21",
-    y2: "18"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "3",
-    y1: "6",
-    x2: "3.01",
-    y2: "6"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "3",
-    y1: "12",
-    x2: "3.01",
-    y2: "12"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "3",
-    y1: "18",
-    x2: "3.01",
-    y2: "18"
-  })),
-  qr: /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "1.8",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("rect", {
-    x: "3",
-    y: "3",
-    width: "7",
-    height: "7"
-  }), /*#__PURE__*/React.createElement("rect", {
-    x: "14",
-    y: "3",
-    width: "7",
-    height: "7"
-  }), /*#__PURE__*/React.createElement("rect", {
-    x: "3",
-    y: "14",
-    width: "7",
-    height: "7"
-  })),
-  edit: /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "1.8",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("path", {
-    d: "M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"
-  }), /*#__PURE__*/React.createElement("path", {
-    d: "M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"
-  })),
-  export: /*#__PURE__*/React.createElement("svg", {
-    viewBox: "0 0 24 24",
-    fill: "none",
-    stroke: "currentColor",
-    strokeWidth: "1.8",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }, /*#__PURE__*/React.createElement("path", {
-    d: "M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"
-  }), /*#__PURE__*/React.createElement("polyline", {
-    points: "7 10 12 15 17 10"
-  }), /*#__PURE__*/React.createElement("line", {
-    x1: "12",
-    y1: "15",
-    x2: "12",
-    y2: "3"
-  }))
-};
+// ======== BUILD 4 PHONES ========
+var tabs = [
+  {id:'home', label:'首页 · Home', icon:I.home, title:'首页'},
+  {id:'items', label:'物品 · Items', icon:I.box, title:'物品'},
+  {id:'space', label:'空间 · Spaces', icon:I.cabinet, title:'空间'},
+  {id:'me', label:'我的 · Profile', icon:I.user, title:'我的'},
+];
 
-// ======== COMPONENTS ========
-function StatusTag({
-  status,
-  expireIn
-}) {
-  if (status === "expiring") return /*#__PURE__*/React.createElement("span", {
-    className: "tag warn"
-  }, expireIn, "天");
-  if (status === "low") return /*#__PURE__*/React.createElement("span", {
-    className: "tag bad"
-  }, "低库存");
-  return null;
-}
-function ModalSheet({
-  title,
-  children,
-  onClose
-}) {
-  return /*#__PURE__*/React.createElement("div", {
-    className: "modal-overlay",
-    onClick: e => {
-      if (e.target === e.currentTarget) onClose();
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "modal-sheet"
-  }, /*#__PURE__*/React.createElement("h3", null, title), children));
+function S(cls,html){ return '<div class="'+cls+'">'+html+'</div>'; }
+
+// Status tag helper
+function statusTag(st,exp){
+  if(st==='expiring') return '<span class="tag warn">'+exp+'天</span>';
+  if(st==='low') return '<span class="tag bad">低库存</span>';
+  return '';
 }
 
-// ======== HOME SCREEN ========
-function HomeScreen({
-  onNavigate
-}) {
-  const s = data.summary;
-  return /*#__PURE__*/React.createElement("div", {
-    className: "scroll-area"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "content"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "hero-card"
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 11,
-      opacity: .8
-    }
-  }, "家庭仓库"), /*#__PURE__*/React.createElement("h2", null, s.total, " 件物品"), /*#__PURE__*/React.createElement("p", null, s.expiring, " 件临期 · ", s.lowStock, " 件低库存")), /*#__PURE__*/React.createElement("div", {
-    className: "stats-row card"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "stat-item",
-    onClick: () => onNavigate('items', 'expiring')
-  }, /*#__PURE__*/React.createElement("b", {
-    style: {
-      color: 'var(--orange)'
-    }
-  }, s.expiring), /*#__PURE__*/React.createElement("span", null, "临期")), /*#__PURE__*/React.createElement("div", {
-    className: "stat-item",
-    onClick: () => onNavigate('items', 'low')
-  }, /*#__PURE__*/React.createElement("b", {
-    style: {
-      color: 'var(--red)'
-    }
-  }, s.lowStock), /*#__PURE__*/React.createElement("span", null, "低库存")), /*#__PURE__*/React.createElement("div", {
-    className: "stat-item",
-    onClick: () => onNavigate('items', 'all')
-  }, /*#__PURE__*/React.createElement("b", null, s.total), /*#__PURE__*/React.createElement("span", null, "全部"))), /*#__PURE__*/React.createElement("div", {
-    className: "action-row"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "action-tile",
-    onClick: () => onNavigate('item-form')
-  }, Icons.plus, /*#__PURE__*/React.createElement("b", null, "新增物品"), /*#__PURE__*/React.createElement("small", null, "录入仓库")), /*#__PURE__*/React.createElement("div", {
-    className: "action-tile",
-    onClick: () => onNavigate('scan')
-  }, Icons.scan, /*#__PURE__*/React.createElement("b", null, "扫码"), /*#__PURE__*/React.createElement("small", null, "定位/绑定"))), /*#__PURE__*/React.createElement("div", {
-    className: "section-head"
-  }, /*#__PURE__*/React.createElement("b", null, "快捷入口")), /*#__PURE__*/React.createElement("div", {
-    className: "quick-row"
-  }, /*#__PURE__*/React.createElement("button", {
-    className: "quick-btn",
-    onClick: () => onNavigate('items', '画材')
-  }, "画材"), /*#__PURE__*/React.createElement("button", {
-    className: "quick-btn",
-    onClick: () => onNavigate('items', '工具')
-  }, "工具"), /*#__PURE__*/React.createElement("button", {
-    className: "quick-btn",
-    onClick: () => onNavigate('space', '1')
-  }, "A柜"), /*#__PURE__*/React.createElement("button", {
-    className: "quick-btn",
-    onClick: () => onNavigate('space', '2')
-  }, "工具柜")), /*#__PURE__*/React.createElement("div", {
-    className: "section-head"
-  }, /*#__PURE__*/React.createElement("b", null, "最近物品"), /*#__PURE__*/React.createElement("a", {
-    onClick: () => onNavigate('items', 'all')
-  }, "全部")), /*#__PURE__*/React.createElement("div", {
-    className: "card",
-    style: {
-      padding: '0 14px'
-    }
-  }, data.recentItems.map(it => /*#__PURE__*/React.createElement("div", {
-    key: it.id,
-    className: "list-item",
-    onClick: () => onNavigate('item-detail', it.id)
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "list-icon"
-  }, Icons.box), /*#__PURE__*/React.createElement("div", {
-    className: "list-info"
-  }, /*#__PURE__*/React.createElement("b", null, it.name), /*#__PURE__*/React.createElement("small", null, it.loc)), /*#__PURE__*/React.createElement("div", {
-    className: "list-right"
-  }, it.status === "ok" && /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontWeight: 700,
-      fontSize: 13
-    }
-  }, "×", it.qty), /*#__PURE__*/React.createElement(StatusTag, {
-    status: it.status,
-    expireIn: it.expireIn
-  })))))));
+// ===== HOME PAGE =====
+var homeHTML =
+  S('hero-card','<div class="sm">家庭仓库</div><h2>128 件物品</h2><p>3 件临期 · 5 件低库存</p>') +
+  S('card',S('stats-row',
+    S('stat-item','<b style="color:var(--orange)">3</b><span>临期</span>')+
+    S('stat-item','<b style="color:var(--red)">5</b><span>低库存</span>')+
+    S('stat-item','<b>128</b><span>全部</span>')
+  )) +
+  S('action-row',
+    S('action-tile',I.plus+'<b>新增物品</b><small>录入仓库</small>')+
+    S('action-tile',I.scan+'<b>扫码</b><small>定位/绑定</small>')
+  ) +
+  S('section-head','<b>快捷入口</b>')+
+  S('quick-row',
+    '<button class="quick-btn">画材</button>'+
+    '<button class="quick-btn">工具</button>'+
+    '<button class="quick-btn">A柜</button>'+
+    '<button class="quick-btn">工具柜</button>'
+  ) +
+  S('section-head','<b>最近物品</b><a>全部</a>')+
+  S('card',
+    S('list-item',S('list-icon',I.box)+S('list-info','<b>温莎牛顿 24色颜料</b><small>书房A柜 / 2层 / 蓝盒</small>')+S('list-right','<span class="tag warn">30天</span>')) +
+    S('list-item',S('list-icon',I.box)+S('list-info','<b>8K 水彩纸</b><small>工具柜 / 1层 / 纸盒</small>')+S('list-right','<span class="tag bad">低库存</span>')) +
+    S('list-item',S('list-icon',I.box)+S('list-info','<b>3M 美纹纸胶带</b><small>工具柜 / B盒</small>')+S('list-right','<span style="font-weight:700;font-size:13px">×4</span>')) +
+    S('list-item',S('list-icon',I.box)+S('list-info','<b>A4 素描纸</b><small>书房A柜 / 3层</small>')+S('list-right','<span style="font-weight:700;font-size:13px">×20</span>'))
+  );
+
+// ===== ITEMS PAGE =====
+var itemsHTML =
+  S('search-bar',I.search+'<span>搜索物品、分类、位置</span>')+
+  S('chip-row',
+    '<button class="chip active">全部</button>'+
+    '<button class="chip">画材</button>'+
+    '<button class="chip">工具</button>'+
+    '<button class="chip">纸张</button>'
+  )+
+  S('section-head','<b>全部</b><a>+新增</a>')+
+  S('card',
+    S('list-item',S('list-icon',I.box)+S('list-info','<b>温莎牛顿 24色颜料</b><small>画材 · 书房A柜/2层/蓝盒</small>')+S('list-right','<span class="tag warn">30天</span>')) +
+    S('list-item',S('list-icon',I.box)+S('list-info','<b>8K 水彩纸</b><small>纸张 · 工具柜/1层/纸盒</small>')+S('list-right','<span class="tag bad">低库存</span>')) +
+    S('list-item',S('list-icon',I.box)+S('list-info','<b>3M 美纹纸胶带</b><small>工具 · 工具柜/B盒</small>')+S('list-right','<span style="font-weight:700;font-size:13px">×4</span>')) +
+    S('list-item',S('list-icon',I.box)+S('list-info','<b>A4 素描纸</b><small>纸张 · 书房A柜/3层</small>')+S('list-right','<span style="font-weight:700;font-size:13px">×20</span>')) +
+    S('list-item',S('list-icon',I.box)+S('list-info','<b>辉柏嘉彩铅48色</b><small>画材 · 书房A柜/2层/绿盒</small>')+S('list-right','<span style="font-weight:700;font-size:13px">×1</span>')) +
+    S('list-item',S('list-icon',I.box)+S('list-info','<b>美工刀 大号</b><small>工具 · 工具柜/A盒</small>')+S('list-right','<span style="font-weight:700;font-size:13px">×2</span>'))
+  );
+
+// ===== ITEM DETAIL PAGE =====
+function itemDetailHTML(name,cat,loc,qty,exp){
+  return (
+    S('detail-hero','<div style="font-size:11px;color:var(--muted)">'+cat+' · '+loc+'</div><h2>'+name+'</h2><div class="count">'+qty+'</div>'+statusTag('expiring',exp)) +
+    S('card',
+      S('info-row','<span class="k">分类</span><span class="v">'+cat+'</span>')+
+      S('info-row','<span class="k">位置</span><span class="v">'+loc+'</span>')+
+      S('info-row','<span class="k">数量</span><span class="v">'+qty+'</span>')+
+      S('info-row','<span class="k">到期</span><span class="v" style="color:var(--orange)">'+exp+'天后</span>')
+    ) +
+    S('action-row',
+      '<button class="btn btn-outline" style="width:100%">'+I.minus+' 消耗</button>'+
+      '<button class="btn btn-outline" style="width:100%">'+I.plus+' 补货</button>'
+    )+
+    '<button class="btn btn-outline" style="width:100%;margin-top:8px">'+I.edit+' 移动位置</button>'+
+    '<button class="btn btn-danger" style="width:100%;margin-top:8px">删除物品</button>'
+  );
 }
 
-// ======== ITEMS SCREEN ========
-function ItemsScreen({
-  onNavigate,
-  filter
-}) {
-  const [cat, setCat] = useState(filter || '全部');
-  const cats = ['全部', '画材', '工具', '纸张'];
-  let items = data.allItems;
-  if (cat !== '全部') items = items.filter(i => i.cat === cat);
-  if (filter === 'expiring') items = items.filter(i => i.status === 'expiring');
-  if (filter === 'low') items = items.filter(i => i.status === 'low');
-  return /*#__PURE__*/React.createElement("div", {
-    className: "scroll-area"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "content"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "search-bar"
-  }, Icons.search, /*#__PURE__*/React.createElement("span", null, "搜索物品、分类、位置")), /*#__PURE__*/React.createElement("div", {
-    className: "chip-row"
-  }, cats.map(c => /*#__PURE__*/React.createElement("button", {
-    key: c,
-    className: "chip" + (cat === c ? " active" : ""),
-    onClick: () => setCat(c)
-  }, c))), /*#__PURE__*/React.createElement("div", {
-    className: "section-head"
-  }, /*#__PURE__*/React.createElement("b", null, cat), /*#__PURE__*/React.createElement("a", {
-    onClick: () => onNavigate('item-form')
-  }, "+新增")), /*#__PURE__*/React.createElement("div", {
-    className: "card",
-    style: {
-      padding: '0 14px'
-    }
-  }, items.map(it => /*#__PURE__*/React.createElement("div", {
-    key: it.id,
-    className: "list-item",
-    onClick: () => onNavigate('item-detail', it.id)
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "list-icon"
-  }, Icons.box), /*#__PURE__*/React.createElement("div", {
-    className: "list-info"
-  }, /*#__PURE__*/React.createElement("b", null, it.name), /*#__PURE__*/React.createElement("small", null, it.loc)), /*#__PURE__*/React.createElement("div", {
-    className: "list-right"
-  }, it.status === "ok" && /*#__PURE__*/React.createElement("span", {
-    style: {
-      fontWeight: 700,
-      fontSize: 13
-    }
-  }, "×", it.qty), /*#__PURE__*/React.createElement(StatusTag, {
-    status: it.status,
-    expireIn: it.expireIn
-  })))))));
-}
+// ===== ITEM FORM =====
+var formHTML =
+  S('section-head','<b>新增物品</b>')+
+  S('card',S('form-stack',
+    '<div><div class="form-label">物品名称</div><input class="input-field" placeholder="如：温莎牛顿颜料"></div>'+
+    '<div><div class="form-label">分类</div><input class="input-field" placeholder="选择分类"></div>'+
+    '<div><div class="form-label">存放位置</div><input class="input-field" placeholder="选择柜子/盒子"></div>'+
+    '<div><div class="form-label">数量</div><input class="input-field" type="number" value="1"></div>'+
+    '<div><div class="form-label">到期日期</div><input class="input-field" type="date"></div>'
+  ))+
+  '<button class="btn btn-primary">确认录入</button>';
 
-// ======== ITEM DETAIL ========
-function ItemDetail({
-  itemId,
-  onNavigate
-}) {
-  const item = data.allItems.find(i => i.id === itemId) || data.allItems[0];
-  const [modal, setModal] = useState(null);
-  return /*#__PURE__*/React.createElement("div", {
-    className: "scroll-area"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "content"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "detail-hero"
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontSize: 11,
-      color: 'var(--muted)'
-    }
-  }, item.cat, " · ", item.loc), /*#__PURE__*/React.createElement("h2", null, item.name), /*#__PURE__*/React.createElement("div", {
-    className: "count"
-  }, item.qty), /*#__PURE__*/React.createElement(StatusTag, {
-    status: item.status,
-    expireIn: item.expireIn
-  })), /*#__PURE__*/React.createElement("div", {
-    className: "card"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "info-row"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "k"
-  }, "分类"), /*#__PURE__*/React.createElement("span", {
-    className: "v"
-  }, item.cat)), /*#__PURE__*/React.createElement("div", {
-    className: "info-row"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "k"
-  }, "位置"), /*#__PURE__*/React.createElement("span", {
-    className: "v"
-  }, item.loc)), /*#__PURE__*/React.createElement("div", {
-    className: "info-row"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "k"
-  }, "数量"), /*#__PURE__*/React.createElement("span", {
-    className: "v"
-  }, item.qty)), item.expireIn && /*#__PURE__*/React.createElement("div", {
-    className: "info-row"
-  }, /*#__PURE__*/React.createElement("span", {
-    className: "k"
-  }, "到期"), /*#__PURE__*/React.createElement("span", {
-    className: "v",
-    style: {
-      color: 'var(--orange)'
-    }
-  }, item.expireIn, "天后"))), /*#__PURE__*/React.createElement("div", {
-    className: "action-row"
-  }, /*#__PURE__*/React.createElement("button", {
-    className: "btn btn-outline",
-    onClick: () => setModal('consume')
-  }, Icons.minus, " 消耗"), /*#__PURE__*/React.createElement("button", {
-    className: "btn btn-outline",
-    onClick: () => setModal('replenish')
-  }, Icons.plus, " 补货")), /*#__PURE__*/React.createElement("button", {
-    className: "btn btn-outline",
-    onClick: () => setModal('move')
-  }, Icons.edit, " 移动位置"), /*#__PURE__*/React.createElement("button", {
-    className: "btn btn-danger",
-    style: {
-      marginTop: 8
-    },
-    onClick: () => onNavigate('items', 'all')
-  }, "删除物品"), modal && /*#__PURE__*/React.createElement(ModalSheet, {
-    title: modal === 'consume' ? '消耗物品' : modal === 'replenish' ? '补货物品' : '移动位置',
-    onClose: () => setModal(null)
-  }, /*#__PURE__*/React.createElement("p", {
-    style: {
-      textAlign: 'center',
-      color: 'var(--muted)',
-      marginBottom: 12
-    }
-  }, item.name, " · 当前 ×", item.qty), modal !== 'move' && /*#__PURE__*/React.createElement("div", {
-    style: {
-      textAlign: 'center',
-      marginBottom: 12
-    }
-  }, /*#__PURE__*/React.createElement("input", {
-    type: "number",
-    defaultValue: 1,
-    min: 1,
-    className: "input-field",
-    style: {
-      width: 80,
-      textAlign: 'center'
-    }
-  })), modal === 'move' && /*#__PURE__*/React.createElement("div", {
-    className: "form-stack"
-  }, /*#__PURE__*/React.createElement("input", {
-    className: "input-field",
-    placeholder: "目标柜子"
-  }), /*#__PURE__*/React.createElement("input", {
-    className: "input-field",
-    placeholder: "目标盒子"
-  })), /*#__PURE__*/React.createElement("button", {
-    className: "btn btn-primary",
-    onClick: () => setModal(null)
-  }, "确认"))));
-}
+// ===== SPACE PAGE =====
+var spaceHTML =
+  S('chip-row',
+    '<button class="chip active">空间</button>'+
+    '<button class="chip">分类</button>'
+  )+
+  S('section-head','<b>空间管理</b><a>+柜子</a>')+
+  S('tree-item',S('list-icon',I.cabinet)+S('tree-body',
+    '<b>书房 A 柜</b><div style="display:flex;align-items:center;gap:6px;margin-top:4px"><small>3层 · 7盒 · 46件</small><span class="tag ok">正常</span></div>'+
+    '<div class="progress-bar" style="width:80%"><div class="fill" style="width:62%"></div></div>')+
+    '<div style="color:var(--brand)">'+I.chevronR+'</div>'
+  )+
+  S('tree-item',S('list-icon',I.cabinet)+S('tree-body',
+    '<b>工具柜</b><div style="display:flex;align-items:center;gap:6px;margin-top:4px"><small>2层 · 5盒 · 31件</small><span class="tag warn">偏满</span></div>'+
+    '<div class="progress-bar" style="width:80%"><div class="fill warn" style="width:88%"></div></div>')+
+    '<div style="color:var(--brand)">'+I.chevronR+'</div>'
+  )+
+  S('tree-item',S('list-icon',I.cabinet)+S('tree-body',
+    '<b>储物间 C 柜</b><div style="display:flex;align-items:center;gap:6px;margin-top:4px"><small>2层 · 4盒 · 28件</small><span class="tag ok">正常</span></div>'+
+    '<div class="progress-bar" style="width:80%"><div class="fill" style="width:54%"></div></div>')+
+    '<div style="color:var(--brand)">'+I.chevronR+'</div>'
+  )+
+  S('tree-item',S('list-icon',I.cabinet)+S('tree-body',
+    '<b>阳台杂物柜</b><div style="display:flex;align-items:center;gap:6px;margin-top:4px"><small>1层 · 2盒 · 23件</small><span class="tag bad">满</span></div>'+
+    '<div class="progress-bar" style="width:80%"><div class="fill bad" style="width:95%"></div></div>')+
+    '<div style="color:var(--brand)">'+I.chevronR+'</div>'
+  )+
+  S('card',S('section-head','<b>概览</b>')+S('stats-row',
+    S('stat-item','<b>4</b><span>柜子</span>')+
+    S('stat-item','<b>18</b><span>盒子</span>')+
+    S('stat-item','<b style="color:var(--orange)">2</b><span>偏高</span>')
+  ));
 
-// ======== ITEM FORM ========
-function ItemForm() {
-  return /*#__PURE__*/React.createElement("div", {
-    className: "scroll-area"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "content"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "section-head"
-  }, /*#__PURE__*/React.createElement("b", null, "新增物品")), /*#__PURE__*/React.createElement("div", {
-    className: "form-stack card"
-  }, /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-    className: "form-label"
-  }, "物品名称"), /*#__PURE__*/React.createElement("input", {
-    className: "input-field",
-    placeholder: "如：温莎牛顿颜料"
-  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-    className: "form-label"
-  }, "分类"), /*#__PURE__*/React.createElement("input", {
-    className: "input-field",
-    placeholder: "选择分类"
-  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-    className: "form-label"
-  }, "存放位置"), /*#__PURE__*/React.createElement("input", {
-    className: "input-field",
-    placeholder: "选择柜子/盒子"
-  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-    className: "form-label"
-  }, "数量"), /*#__PURE__*/React.createElement("input", {
-    className: "input-field",
-    type: "number",
-    defaultValue: 1
-  })), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("div", {
-    className: "form-label"
-  }, "到期日期"), /*#__PURE__*/React.createElement("input", {
-    className: "input-field",
-    type: "date"
-  }))), /*#__PURE__*/React.createElement("button", {
-    className: "btn btn-primary"
-  }, "确认录入")));
-}
+// ===== PROFILE PAGE =====
+var profileHTML =
+  S('hero-card',
+    '<div style="display:flex;align-items:center;gap:14px">'+
+    '<div style="width:56px;height:56px;border-radius:18px;background:rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800">曦</div>'+
+    '<div><h2 style="font-size:20px">曦曦</h2><p>管理员 · 个人版</p></div>'+
+    '<div style="margin-left:auto">'+I.edit+'</div>'+
+    '</div>'
+  )+
+  S('card',
+    S('setting-row',S('setting-icon',I.list)+S('setting-text','<b>出入库记录</b><small>消耗、补货、移动</small>')+'<div class="setting-arrow">›</div>')+
+    S('setting-row',S('setting-icon',I.qr)+S('setting-text','<b>二维码管理</b><small>绑定、生成、打印</small>')+'<div class="setting-arrow">›</div>')+
+    S('setting-row',S('setting-icon',I.settings)+S('setting-text','<b>偏好设置</b><small>主题、提醒、默认视图</small>')+'<div class="setting-arrow">›</div>')+
+    S('setting-row',S('setting-icon',I.export)+S('setting-text','<b>导入导出</b><small>备份与迁移</small>')+'<div class="setting-arrow">›</div>')
+  )+
+  S('section-head','<b>数据概览</b>')+
+  S('card',S('stats-row',
+    S('stat-item','<b>128</b><span>物品</span>')+
+    S('stat-item','<b>18</b><span>盒子</span>')+
+    S('stat-item','<b>4</b><span>柜子</span>')
+  ));
 
-// ======== SPACE SCREEN ========
-function SpaceScreen({
-  onNavigate
-}) {
-  const [view, setView] = useState('cabinets');
-  const [selCabinet, setSelCabinet] = useState(null);
-  const [selLayer, setSelLayer] = useState(null);
-  const [mode, setMode] = useState('space');
-  if (view === 'cabinets') {
-    return /*#__PURE__*/React.createElement("div", {
-      className: "scroll-area"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "content"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "chip-row"
-    }, /*#__PURE__*/React.createElement("button", {
-      className: "chip" + (mode === 'space' ? " active" : ""),
-      onClick: () => setMode('space')
-    }, "空间"), /*#__PURE__*/React.createElement("button", {
-      className: "chip" + (mode === 'category' ? " active" : ""),
-      onClick: () => setMode('category')
-    }, "分类")), mode === 'space' && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
-      className: "section-head"
-    }, /*#__PURE__*/React.createElement("b", null, "空间管理"), /*#__PURE__*/React.createElement("a", {
-      onClick: () => onNavigate('item-form')
-    }, "+柜子")), data.cabinets.map(c => /*#__PURE__*/React.createElement("div", {
-      key: c.id,
-      className: "tree-item",
-      onClick: () => {
-        setSelCabinet(c);
-        setView('layers:' + c.id);
-      }
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "list-icon"
-    }, Icons.cabinet), /*#__PURE__*/React.createElement("div", {
-      style: {
-        flex: 1
-      }
-    }, /*#__PURE__*/React.createElement("b", null, c.name), /*#__PURE__*/React.createElement("div", {
-      style: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: 6,
-        marginTop: 4
-      }
-    }, /*#__PURE__*/React.createElement("small", null, c.layers, "层 · ", c.boxes, "盒 · ", c.items, "件"), c.pct > 85 ? /*#__PURE__*/React.createElement("span", {
-      className: "tag bad"
-    }, "满") : c.pct > 70 ? /*#__PURE__*/React.createElement("span", {
-      className: "tag warn"
-    }, "偏满") : /*#__PURE__*/React.createElement("span", {
-      className: "tag ok"
-    }, "正常")), /*#__PURE__*/React.createElement("div", {
-      className: "progress-bar",
-      style: {
-        width: '80%'
-      }
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "fill" + (c.pct > 85 ? " bad" : c.pct > 70 ? " warn" : ""),
-      style: {
-        width: c.pct + '%'
-      }
-    }))), Icons.chevronR)), /*#__PURE__*/React.createElement("div", {
-      className: "card"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "section-head"
-    }, /*#__PURE__*/React.createElement("b", null, "概览")), /*#__PURE__*/React.createElement("div", {
-      className: "stats-row"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "stat-item"
-    }, /*#__PURE__*/React.createElement("b", null, data.summary.cabinets), /*#__PURE__*/React.createElement("span", null, "柜子")), /*#__PURE__*/React.createElement("div", {
-      className: "stat-item"
-    }, /*#__PURE__*/React.createElement("b", null, data.summary.boxes), /*#__PURE__*/React.createElement("span", null, "盒子")), /*#__PURE__*/React.createElement("div", {
-      className: "stat-item"
-    }, /*#__PURE__*/React.createElement("b", {
-      style: {
-        color: 'var(--orange)'
-      }
-    }, data.summary.fullBoxes), /*#__PURE__*/React.createElement("span", null, "偏高"))))), mode === 'category' && /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("div", {
-      className: "section-head"
-    }, /*#__PURE__*/React.createElement("b", null, "分类管理"), /*#__PURE__*/React.createElement("a", null, "+分类")), data.categories.map(cat => /*#__PURE__*/React.createElement("div", {
-      key: cat.id,
-      className: "tree-item"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "list-icon"
-    }, Icons.box), /*#__PURE__*/React.createElement("div", {
-      style: {
-        flex: 1
-      }
-    }, /*#__PURE__*/React.createElement("b", null, cat.name), /*#__PURE__*/React.createElement("small", null, cat.subs.join(' · '))), Icons.chevronR)))));
-  }
-  if (view.startsWith('layers:')) {
-    const cid = parseInt(view.split(':')[1]);
-    const cab = data.cabinets.find(c => c.id === cid);
-    const layers = data.cabinetLayers[cid] || [];
-    return /*#__PURE__*/React.createElement("div", {
-      className: "scroll-area"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "content"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "breadcrumb"
-    }, /*#__PURE__*/React.createElement("span", {
-      onClick: () => setView('cabinets')
-    }, "空间"), " › ", /*#__PURE__*/React.createElement("b", null, cab?.name)), layers.map(l => /*#__PURE__*/React.createElement("div", {
-      key: l.id,
-      className: "tree-item",
-      onClick: () => {
-        setSelLayer(l);
-        setView('boxes:' + l.id);
-      }
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "list-icon"
-    }, Icons.box), /*#__PURE__*/React.createElement("div", {
-      style: {
-        flex: 1
-      }
-    }, /*#__PURE__*/React.createElement("b", null, l.name), /*#__PURE__*/React.createElement("small", null, l.boxes, "盒 · ", l.items, "件")), Icons.chevronR)), /*#__PURE__*/React.createElement("button", {
-      className: "btn btn-outline",
-      style: {
-        marginTop: 4
-      }
-    }, Icons.plus, " 添加层")));
-  }
-  if (view.startsWith('boxes:')) {
-    const lid = parseInt(view.split(':')[1]);
-    const boxes = data.layerBoxes[lid] || [];
-    return /*#__PURE__*/React.createElement("div", {
-      className: "scroll-area"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "content"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "breadcrumb"
-    }, /*#__PURE__*/React.createElement("span", {
-      onClick: () => setView('cabinets')
-    }, "空间"), " › ", /*#__PURE__*/React.createElement("span", {
-      onClick: () => setView('layers:' + (selCabinet?.id || 1))
-    }, selCabinet?.name || '柜子'), " › ", /*#__PURE__*/React.createElement("b", null, selLayer?.name || '层')), boxes.map(b => /*#__PURE__*/React.createElement("div", {
-      key: b.id,
-      className: "tree-item"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "list-icon"
-    }, Icons.box), /*#__PURE__*/React.createElement("div", {
-      style: {
-        flex: 1
-      }
-    }, /*#__PURE__*/React.createElement("b", null, b.name), /*#__PURE__*/React.createElement("small", null, b.items, "件")), Icons.chevronR)), /*#__PURE__*/React.createElement("button", {
-      className: "btn btn-outline",
-      style: {
-        marginTop: 4
-      }
-    }, Icons.plus, " 添加盒子")));
-  }
-  return null;
-}
+// ===== RECORDS PAGE =====
+var recordsHTML =
+  S('section-head','<b>出入库记录</b>')+
+  S('card',
+    S('list-item',S('list-icon',I.minus)+S('list-info','<b>温莎牛顿颜料</b><small>书房A柜/2层/蓝盒</small>')+'<div class="list-right"><div class="record-action" style="color:var(--red)">-1</div><div class="record-time">今天 14:30</div></div>')+
+    S('list-item',S('list-icon',I.plus)+S('list-info','<b>A4 素描纸</b><small>书房A柜/3层</small>')+'<div class="list-right"><div class="record-action" style="color:var(--green)">+10</div><div class="record-time">昨天 09:15</div></div>')+
+    S('list-item',S('list-icon',I.edit)+S('list-info','<b>3M 胶带</b><small>工具柜/A盒 → B盒</small>')+'<div class="list-right"><div class="record-time">6月8日</div></div>')+
+    S('list-item',S('list-icon',I.plus)+S('list-info','<b>辉柏嘉彩铅</b><small>书房A柜/2层/绿盒</small>')+'<div class="list-right"><div class="record-action" style="color:var(--green)">+1</div><div class="record-time">6月7日</div></div>')
+  );
 
-// ======== PROFILE SCREEN ========
-function ProfileScreen({
-  onNavigate
-}) {
-  return /*#__PURE__*/React.createElement("div", {
-    className: "scroll-area"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "content"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "hero-card",
-    style: {
-      display: 'flex',
-      alignItems: 'center',
-      gap: 14
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: 56,
-      height: 56,
-      borderRadius: 18,
-      background: 'rgba(255,255,255,.25)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      fontSize: 24,
-      fontWeight: 800
-    }
-  }, data.profile.name[0]), /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h2", {
-    style: {
-      fontSize: 20
-    }
-  }, data.profile.name), /*#__PURE__*/React.createElement("p", null, data.profile.role, " · ", data.profile.plan)), /*#__PURE__*/React.createElement("div", {
-    style: {
-      marginLeft: 'auto'
-    }
-  }, Icons.edit)), /*#__PURE__*/React.createElement("div", {
-    className: "card"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "setting-row",
-    onClick: () => onNavigate('records')
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "setting-icon"
-  }, Icons.list), /*#__PURE__*/React.createElement("div", {
-    className: "setting-text"
-  }, /*#__PURE__*/React.createElement("b", null, "出入库记录"), /*#__PURE__*/React.createElement("small", null, "消耗、补货、移动")), /*#__PURE__*/React.createElement("div", {
-    className: "setting-arrow"
-  }, "›")), /*#__PURE__*/React.createElement("div", {
-    className: "setting-row",
-    onClick: () => onNavigate('qrcode')
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "setting-icon"
-  }, Icons.qr), /*#__PURE__*/React.createElement("div", {
-    className: "setting-text"
-  }, /*#__PURE__*/React.createElement("b", null, "二维码管理"), /*#__PURE__*/React.createElement("small", null, "绑定、生成、打印")), /*#__PURE__*/React.createElement("div", {
-    className: "setting-arrow"
-  }, "›")), /*#__PURE__*/React.createElement("div", {
-    className: "setting-row"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "setting-icon"
-  }, Icons.settings), /*#__PURE__*/React.createElement("div", {
-    className: "setting-text"
-  }, /*#__PURE__*/React.createElement("b", null, "偏好设置"), /*#__PURE__*/React.createElement("small", null, "主题、提醒、默认视图")), /*#__PURE__*/React.createElement("div", {
-    className: "setting-arrow"
-  }, "›")), /*#__PURE__*/React.createElement("div", {
-    className: "setting-row"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "setting-icon"
-  }, Icons.export), /*#__PURE__*/React.createElement("div", {
-    className: "setting-text"
-  }, /*#__PURE__*/React.createElement("b", null, "导入导出"), /*#__PURE__*/React.createElement("small", null, "备份与迁移")), /*#__PURE__*/React.createElement("div", {
-    className: "setting-arrow"
-  }, "›"))), /*#__PURE__*/React.createElement("div", {
-    className: "section-head"
-  }, /*#__PURE__*/React.createElement("b", null, "数据概览")), /*#__PURE__*/React.createElement("div", {
-    className: "stats-row card"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "stat-item"
-  }, /*#__PURE__*/React.createElement("b", null, data.summary.total), /*#__PURE__*/React.createElement("span", null, "物品")), /*#__PURE__*/React.createElement("div", {
-    className: "stat-item"
-  }, /*#__PURE__*/React.createElement("b", null, data.summary.boxes), /*#__PURE__*/React.createElement("span", null, "盒子")), /*#__PURE__*/React.createElement("div", {
-    className: "stat-item"
-  }, /*#__PURE__*/React.createElement("b", null, data.summary.cabinets), /*#__PURE__*/React.createElement("span", null, "柜子")))));
-}
+// ===== QRCODE PAGE =====
+var qrcodeHTML =
+  S('section-head','<b>二维码管理</b><a>'+I.plus+' 生成</a>')+
+  S('qr-grid',
+    S('qr-item','<div class="qr-block"></div><b style="font-size:12px">书房 A 柜</b><div style="font-size:10px;color:var(--muted)">柜子</div>')+
+    S('qr-item','<div class="qr-block"></div><b style="font-size:12px">蓝盒</b><div style="font-size:10px;color:var(--muted)">盒子</div>')+
+    S('qr-item','<div class="qr-block"></div><b style="font-size:12px">温莎牛顿颜料</b><div style="font-size:10px;color:var(--muted)">物品</div>')+
+    S('qr-item','<div class="qr-block"></div><b style="font-size:12px">工具柜</b><div style="font-size:10px;color:var(--muted)">柜子</div>')
+  );
 
-// ======== RECORDS SCREEN ========
-function RecordsScreen() {
-  return /*#__PURE__*/React.createElement("div", {
-    className: "scroll-area"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "content"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "section-head"
-  }, /*#__PURE__*/React.createElement("b", null, "出入库记录")), /*#__PURE__*/React.createElement("div", {
-    className: "card",
-    style: {
-      padding: '0 14px'
-    }
-  }, data.records.map(r => /*#__PURE__*/React.createElement("div", {
-    key: r.id,
-    className: "list-item"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "list-icon"
-  }, r.action === '消耗' ? Icons.minus : r.action === '补货' ? Icons.plus : r.action === '移动' ? Icons.edit : Icons.plus), /*#__PURE__*/React.createElement("div", {
-    className: "list-info"
-  }, /*#__PURE__*/React.createElement("b", null, r.item), /*#__PURE__*/React.createElement("small", null, r.loc)), /*#__PURE__*/React.createElement("div", {
-    className: "list-right"
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      fontWeight: 700,
-      color: r.qty > 0 ? 'var(--green)' : r.qty < 0 ? 'var(--red)' : ''
-    }
-  }, r.qty > 0 ? '+' : '', r.qty !== 0 ? r.qty : ''), /*#__PURE__*/React.createElement("small", {
-    style: {
-      color: 'var(--muted)'
-    }
-  }, r.time)))))));
-}
+// ===== SCAN PAGE =====
+var scanHTML =
+  '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:20px">'+
+  '<div style="width:180px;height:180px;border:1px dashed #b8ccc6;border-radius:20px;display:flex;align-items:center;justify-content:center">'+
+  '<div style="width:120px;height:120px;border:1px solid #d8e6e2;border-radius:8px"></div></div>'+
+  '<p style="font-size:13px;color:var(--muted)">对准二维码</p></div>';
 
-// ======== QRCODE SCREEN ========
-function QRCodeScreen() {
-  return /*#__PURE__*/React.createElement("div", {
-    className: "scroll-area"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "content"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "section-head"
-  }, /*#__PURE__*/React.createElement("b", null, "二维码管理"), /*#__PURE__*/React.createElement("a", null, Icons.plus, " 生成")), /*#__PURE__*/React.createElement("div", {
-    className: "qr-grid"
-  }, [{
-    name: "书房 A 柜",
-    type: "柜子"
-  }, {
-    name: "蓝盒",
-    type: "盒子"
-  }, {
-    name: "温莎牛顿颜料",
-    type: "物品"
-  }, {
-    name: "工具柜",
-    type: "柜子"
-  }].map((q, i) => /*#__PURE__*/React.createElement("div", {
-    key: i,
-    className: "qr-item"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "qr-block"
-  }), /*#__PURE__*/React.createElement("b", {
-    style: {
-      fontSize: 12
-    }
-  }, q.name), /*#__PURE__*/React.createElement("small", {
-    style: {
-      color: 'var(--muted)',
-      fontSize: 10
-    }
-  }, q.type))))));
-}
-
-// ======== SCAN SCREEN ========
-function ScanScreen() {
-  return /*#__PURE__*/React.createElement("div", {
-    style: {
-      flex: 1,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: 16
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: 180,
-      height: 180,
-      border: '1px dashed #b8ccc6',
-      borderRadius: 20,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center'
-    }
-  }, /*#__PURE__*/React.createElement("div", {
-    style: {
-      width: 120,
-      height: 120,
-      border: '1px solid #d8e6e2',
-      borderRadius: 8
-    }
-  })), /*#__PURE__*/React.createElement("p", {
-    style: {
-      fontSize: 13,
-      color: 'var(--muted)'
-    }
-  }, "对准二维码"));
-}
-
-// ======== LOGIN SCREEN ========
-function LoginScreen({
-  onSkip
-}) {
-  return /*#__PURE__*/React.createElement("div", {
-    className: "login-page"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "login-logo"
-  }, "家"), /*#__PURE__*/React.createElement("h2", {
-    style: {
-      fontSize: 22,
-      fontWeight: 700
-    }
-  }, "家庭仓库"), /*#__PURE__*/React.createElement("p", {
-    style: {
-      fontSize: 12,
-      color: 'var(--muted)',
-      textAlign: 'center'
-    }
-  }, "扫码、定位、消耗、补货", /*#__PURE__*/React.createElement("br", null), "一套管住家里物品"), /*#__PURE__*/React.createElement("div", {
-    className: "form-stack",
-    style: {
-      width: '100%'
-    }
-  }, /*#__PURE__*/React.createElement("input", {
-    className: "input-field",
-    placeholder: "手机号",
-    defaultValue: "138****8888"
-  }), /*#__PURE__*/React.createElement("input", {
-    className: "input-field",
-    type: "password",
-    placeholder: "密码",
-    defaultValue: "········"
-  }), /*#__PURE__*/React.createElement("button", {
-    className: "btn btn-primary",
-    style: {
-      marginTop: 8
-    }
-  }, "登录")), /*#__PURE__*/React.createElement("a", {
-    style: {
-      fontSize: 12,
-      color: 'var(--brand)',
-      cursor: 'pointer'
-    },
-    onClick: onSkip
-  }, "跳过登录 →"));
-}
-
-// ======== APP PHONE ========
-function AppPhone({
-  initialTab
-}) {
-  const [tab, setTab] = useState(initialTab || 'home');
-  const [screen, setScreen] = useState('main');
-  const [screenParams, setScreenParams] = useState(null);
-  const [navStack, setNavStack] = useState([]);
-  const navigate = (s, p) => {
-    if (s === 'items' || s === 'space') {
-      setTab(s === 'items' ? 'items' : 'space');
-      setScreen('main');
-      setScreenParams(p);
-      setNavStack([]);
-    } else if (s === 'item-detail' || s === 'item-form' || s === 'records' || s === 'qrcode' || s === 'scan') {
-      setNavStack(prev => [...prev, {
-        screen: s,
-        params: p
-      }]);
-      setScreen(s);
-      setScreenParams(p);
-    }
+// ===== BUILD EACH PHONE =====
+for(var i=0; i<4; i++){
+  var t = tabs[i];
+  var phoneId = 'phone' + i;
+  var mainPages = [homeHTML, itemsHTML, spaceHTML, profileHTML];
+  var subPages = {
+    'item-detail': itemDetailHTML('温莎牛顿 24色颜料','画材','书房A柜/2层/蓝盒',3,30),
+    'item-form': formHTML,
+    'records': recordsHTML,
+    'qrcode': qrcodeHTML,
+    'scan': scanHTML
   };
-  const goBack = () => {
-    if (navStack.length > 0) {
-      const prev = navStack[navStack.length - 1];
-      setNavStack(navStack.slice(0, -1));
-      setScreen(prev.screen);
-      setScreenParams(prev.params);
-    } else {
-      setScreen('main');
-      setScreenParams(null);
-    }
+  var subPageNames = {
+    'item-detail':'物品详情','item-form':'新增物品','records':'出入库记录','qrcode':'二维码管理','scan':'扫码'
   };
-  const getTitle = () => {
-    if (screen === 'item-detail') return '物品详情';
-    if (screen === 'item-form') return '新增物品';
-    if (screen === 'records') return '出入库记录';
-    if (screen === 'qrcode') return '二维码管理';
-    if (screen === 'scan') return '扫码';
-    if (screen === 'login') return '';
-    if (tab === 'home') return '首页';
-    if (tab === 'items') return '物品';
-    if (tab === 'space') return '空间';
-    if (tab === 'me') return '我的';
-    return '';
-  };
-  const showNav = screen !== 'main' || tab === 'home';
-  const showBack = screen !== 'main' && screen !== 'login';
-  if (screen === 'login') {
-    return /*#__PURE__*/React.createElement("div", {
-      className: "phone"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "screen"
-    }, /*#__PURE__*/React.createElement("div", {
-      className: "status-bar"
-    }, /*#__PURE__*/React.createElement("b", null, "09:41"), /*#__PURE__*/React.createElement("span", null, "5G \xA082%")), /*#__PURE__*/React.createElement(LoginScreen, {
-      onSkip: () => {
-        setScreen('main');
-        setNavStack([]);
-      }
-    })));
+
+  // Pre-render ALL page variants in the HTML
+  var allPages = '';
+  // Main pages
+  var tabs2 = ['home','items','space','me'];
+  var pageIds = ['home','items','space','me'];
+  for(var j=0;j<4;j++){
+    allPages += '<div class="page'+(j===i?' active':'')+'" id="'+phoneId+'-page-'+tabs2[j]+'">'+mainPages[j]+'</div>';
   }
-  return /*#__PURE__*/React.createElement("div", {
-    className: "phone"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "screen"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "status-bar"
-  }, /*#__PURE__*/React.createElement("b", null, "09:41"), /*#__PURE__*/React.createElement("span", null, "5G \xA082%")), showNav && /*#__PURE__*/React.createElement("div", {
-    className: "nav-bar"
-  }, showBack && /*#__PURE__*/React.createElement("button", {
-    className: "back-btn",
-    onClick: goBack
-  }, Icons.chevronL), /*#__PURE__*/React.createElement("span", {
-    className: "title"
-  }, getTitle()), screen === 'main' && tab === 'space' && /*#__PURE__*/React.createElement("button", {
-    className: "action"
-  }, "搜索")), screen === 'main' && tab === 'home' && /*#__PURE__*/React.createElement(HomeScreen, {
-    onNavigate: navigate
-  }), screen === 'main' && tab === 'items' && /*#__PURE__*/React.createElement(ItemsScreen, {
-    onNavigate: navigate,
-    filter: screenParams
-  }), screen === 'main' && tab === 'space' && /*#__PURE__*/React.createElement(SpaceScreen, {
-    onNavigate: navigate
-  }), screen === 'main' && tab === 'me' && /*#__PURE__*/React.createElement(ProfileScreen, {
-    onNavigate: navigate
-  }), screen === 'item-detail' && /*#__PURE__*/React.createElement(ItemDetail, {
-    itemId: screenParams,
-    onNavigate: navigate
-  }), screen === 'item-form' && /*#__PURE__*/React.createElement(ItemForm, null), screen === 'records' && /*#__PURE__*/React.createElement(RecordsScreen, null), screen === 'qrcode' && /*#__PURE__*/React.createElement(QRCodeScreen, null), screen === 'scan' && /*#__PURE__*/React.createElement(ScanScreen, null), /*#__PURE__*/React.createElement("div", {
-    className: "tab-bar"
-  }, /*#__PURE__*/React.createElement("button", {
-    className: "tab-item" + (tab === 'home' ? ' active' : ''),
-    onClick: () => {
-      setTab('home');
-      setScreen('main');
-      setNavStack([]);
-    }
-  }, Icons.home, /*#__PURE__*/React.createElement("span", null, "首页")), /*#__PURE__*/React.createElement("button", {
-    className: "tab-item" + (tab === 'items' ? ' active' : ''),
-    onClick: () => {
-      setTab('items');
-      setScreen('main');
-      setNavStack([]);
-    }
-  }, Icons.box, /*#__PURE__*/React.createElement("span", null, "物品")), /*#__PURE__*/React.createElement("div", {
-    className: "tab-scan-slot"
-  }, /*#__PURE__*/React.createElement("button", {
-    className: "tab-scan-btn",
-    onClick: () => navigate('scan')
-  }, Icons.scan)), /*#__PURE__*/React.createElement("button", {
-    className: "tab-item" + (tab === 'space' ? ' active' : ''),
-    onClick: () => {
-      setTab('space');
-      setScreen('main');
-      setNavStack([]);
-    }
-  }, Icons.cabinet, /*#__PURE__*/React.createElement("span", null, "空间")), /*#__PURE__*/React.createElement("button", {
-    className: "tab-item" + (tab === 'me' ? ' active' : ''),
-    onClick: () => {
-      setTab('me');
-      setScreen('main');
-      setNavStack([]);
-    }
-  }, Icons.user, /*#__PURE__*/React.createElement("span", null, "我的")))));
-}
+  // Sub pages
+  for(var k in subPages){
+    allPages += '<div class="page" id="'+phoneId+'-page-'+k+'">'+subPages[k]+'</div>';
+  }
 
-// ======== MAIN ========
-function App() {
-  const phones = [{
-    id: 1,
-    label: '首页 · Home',
-    tab: 'home'
-  }, {
-    id: 2,
-    label: '物品 · Items',
-    tab: 'items'
-  }, {
-    id: 3,
-    label: '空间 · Spaces',
-    tab: 'space'
-  }, {
-    id: 4,
-    label: '我的 · Profile',
-    tab: 'me'
-  }];
-  return phones.map(p => /*#__PURE__*/React.createElement("div", {
-    key: p.id,
-    className: "tile"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "tile-label"
-  }, p.label), /*#__PURE__*/React.createElement(AppPhone, {
-    initialTab: p.tab
-  })));
+  var html = '';
+  html += '<div class="tile">';
+  html += '<div class="tile-label">'+t.label+'</div>';
+  html += '<div class="phone"><div class="screen">';
+  html += '<div class="status-bar"><b>09:41</b><span>5G &nbsp;82%</span></div>';
+  html += '<div class="nav-bar">';
+  html += '<button class="back-btn" id="'+phoneId+'-back">'+I.chevronL+'</button>';
+  html += '<span class="title" id="'+phoneId+'-title">'+t.title+'</span>';
+  html += '</div>';
+  html += '<div class="scroll-area"><div class="page-content" id="'+phoneId+'-content">';
+  html += allPages;
+  html += '</div></div>';
+  html += '<div class="tab-bar">';
+  for(var j=0;j<4;j++){
+    var t2 = tabs2[j];
+    html += '<button class="tab-btn'+(j===i?' active':'')+'" data-tab="'+t2+'" data-phone="'+phoneId+'">'+I[t2]+'<span>'+(['首页','物品','空间','我的'][j])+'</span></button>';
+  }
+  html += '<div class="tab-scan-slot"><button class="tab-scan-btn">'+I.scan+'</button></div>';
+  html += '</div>';
+  html += '</div></div>';
+  html += '</div>';
+  document.write(html);
 }
-ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.createElement(App, null));
-
 </script>
-</body>
-</html>
+
+<script>
+// ===== INTERACTIVITY =====
+document.querySelectorAll('.tab-btn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var phoneId = this.dataset.phone;
+    var tab = this.dataset.tab;
+    // Update active tab
+    this.parentElement.querySelectorAll('.tab-btn').forEach(function(b){ b.classList.remove('active'); });
+    this.classList.add('active');
+    // Show correct page
+    var container = document.getElementById(phoneId+'-content');
+    container.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+    var target = document.getElementById(phoneId+'-page-'+tab);
+    if(target) target.classList.add('active');
+    // Update title
+    var titles = {home:'首页',items:'物品',space:'空间',me:'我的'};
+    document.getElementById(phoneId+'-title').textContent = titles[tab]||'';
+    // Hide back button
+    document.getElementById(phoneId+'-back').classList.remove('visible');
+  });
+});
+
+// Item list clicks → show detail
+document.querySelectorAll('.list-item').forEach(function(item){
+  item.addEventListener('click',function(){
+    var phone = this.closest('.phone');
+    var phoneId = phone ? phone.querySelector('.tab-btn').dataset.phone : null;
+    if(!phoneId) return;
+    // Show item detail
+    var container = document.getElementById(phoneId+'-content');
+    container.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+    var detail = document.getElementById(phoneId+'-page-item-detail');
+    if(detail) detail.classList.add('active');
+    document.getElementById(phoneId+'-title').textContent = '物品详情';
+    document.getElementById(phoneId+'-back').classList.add('visible');
+  });
+});
+
+// Back buttons
+document.querySelectorAll('.back-btn').forEach(function(btn){
+  btn.addEventListener('click',function(){
+    var phoneId = this.id.replace('-back','');
+    var container = document.getElementById(phoneId+'-content');
+    container.querySelectorAll('.page').forEach(function(p){ p.classList.remove('active'); });
+    // Find which tab is active
+    var activeTab = this.closest('.screen').querySelector('.tab-btn.active');
+    var tab = activeTab ? activeTab.dataset.tab : 'home';
+    var target = document.getElementById(phoneId+'-page-'+tab);
+    if(target) target.classList.add('active');
+    var titles = {home:'首页',items:'物品',space:'空间',me:'我的'};
+    document.getElementById(phoneId+'-title').textContent = titles[tab]||'';
+    this.classList.remove('visible');
+  });
+});
+</script>
+
+</div></body></html>
