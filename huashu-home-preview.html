@@ -7,7 +7,7 @@
 <style>
 :root{
   --bg:#fbf9f5; --card:#fffefb; --ink:#2c2a28; --muted:#9e968d;
-  --line:#ece6db; --brand:#5b6abf; --brand-warm:#efeef7;
+  --line:#ece6db; --brand:#6255e7; --brand-deep:#5146d8; --brand-warm:#f0edff;
   --amber:#e8956c; --rose:#d9707a; --gold:#c9a24c;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -38,25 +38,29 @@ body{
 
 /* ── 顶部：温暖问候 ── */
 .top{padding:20px 22px 0}
-.top .wave{font-size:24px;line-height:1}
-.top h2{font-size:22px;font-weight:620;color:var(--ink);letter-spacing:-.45px;margin-top:6px;line-height:1.18}
-.top p{font-size:12px;color:var(--muted);margin-top:5px;font-weight:440;line-height:1.45}
+.home-badge{
+  display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 11px;border-radius:999px;
+  background:var(--brand-warm);color:var(--brand);font-size:11px;font-weight:620;
+}
+.home-badge svg{width:14px;height:14px}
+.top h2{font-size:22px;font-weight:620;color:var(--ink);letter-spacing:-.45px;margin-top:10px;line-height:1.18}
 
 /* ── 总览卡：柔软大卡片 ── */
 .overview{padding:16px 20px 0}
 .overview-card{
-  background:var(--card);border-radius:20px;padding:16px 20px 18px;
-  box-shadow:0 1px 2px rgba(0,0,0,.02),0 4px 16px rgba(0,0,0,.03);
+  background:linear-gradient(135deg,#7b6df2 0%,var(--brand) 48%,var(--brand-deep) 100%);
+  border-radius:22px;padding:18px 20px 20px;color:#fff;
+  box-shadow:0 14px 30px rgba(98,85,231,.24);
 }
+.overview-card .card-icon{
+  width:34px;height:34px;border-radius:12px;background:rgba(255,255,255,.18);
+  display:flex;align-items:center;justify-content:center;margin-bottom:14px;
+}
+.overview-card .card-icon svg{width:18px;height:18px}
 .overview-card .total{
-  font-size:38px;font-weight:650;color:var(--ink);letter-spacing:-.9px;line-height:1;
+  font-size:42px;font-weight:680;color:#fff;letter-spacing:-1px;line-height:1;
 }
-.overview-card .total-label{font-size:12px;color:var(--muted);margin-top:3px}
-.overview-card .mood{
-  font-size:11px;color:var(--muted);margin-top:11px;line-height:1.5;
-  padding-top:11px;border-top:1px solid var(--line);
-}
-.mood b{color:var(--ink);font-weight:600}
+.overview-card .total-label{font-size:12px;color:rgba(255,255,255,.82);margin-top:5px;font-weight:560}
 
 /* ── 小指标 ── */
 .indicators{padding:10px 20px 0;display:flex;gap:8px}
@@ -162,6 +166,7 @@ body{
 <g id="ic-list"><path d="M8 6h13M8 12h13M8 18h13"/></g>
 <g id="ic-user"><circle cx="12" cy="7" r="4"/><path d="M5.5 21a6.5 6.5 0 0113 0"/></g>
 <g id="ic-edit"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4z"/></g>
+<g id="ic-home"><path d="M3 10.5L12 3l9 7.5V21a1 1 0 01-1 1h-5v-7H9v7H4a1 1 0 01-1-1z"/></g>
 </defs></svg>
 </head>
 <body>
@@ -173,19 +178,15 @@ body{
 <div class="scroll"><div class="content">
 
 <div class="top">
-  <div class="wave">🏠</div>
+  <div class="home-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#ic-home"/></svg><span>家庭仓库</span></div>
   <h2>下午好，曦曦</h2>
-  <p>家里的东西都安稳，<br/>有 3 件事值得看一眼。</p>
 </div>
 
 <div class="overview">
   <div class="overview-card">
+    <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><use href="#ic-cab"/></svg></div>
     <div class="total">128</div>
     <div class="total-label">件物品</div>
-    <div class="mood">
-      这个月添了 <b>12 件</b>，用完了 <b>3 件</b><br/>
-      一切都在掌控之中 ✨
-    </div>
   </div>
 </div>
 
