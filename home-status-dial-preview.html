@@ -104,7 +104,7 @@ button{font-family:inherit}
 .copy-fallback{position:fixed;left:-9999px;top:0;width:1px;height:1px;opacity:0}
 svg{fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
 
-/* Responsive redesign: mobile first, then tablet and desktop. */
+/* Mobile app prototype: desktop only centers the phone preview. */
 body{padding:clamp(0px,3vw,32px);background:radial-gradient(circle at 15% 10%,#f2f0ff 0,transparent 30%),linear-gradient(145deg,#e9e9f2,#d9dbe8)}
 .phone{width:min(100%,390px);height:min(844px,100vh);min-height:620px;padding:9px;border-radius:34px}
 .screen{border-radius:26px}
@@ -126,22 +126,6 @@ body{padding:clamp(0px,3vw,32px);background:radial-gradient(circle at 15% 10%,#f
 
 @media (max-width:359px){
   .top,.content{padding-left:14px;padding-right:14px}.summary{padding:14px}.summary-icon{width:60px;height:60px}.summary-text strong{font-size:32px}.content{gap:10px}.flow-item{padding:8px 6px;column-gap:4px}.nav-item{width:40px}.nav-scan{margin-left:0;margin-right:0}
-}
-@media (min-width:700px){
-  body{align-items:center}
-  .phone{width:min(92vw,820px);height:min(88vh,760px);padding:0;background:transparent;border-radius:28px;box-shadow:0 28px 80px rgba(25,28,58,.18)}
-  .phone:before,.status{display:none}.screen{border-radius:28px}
-  .top{padding:28px 30px 14px}.title b{font-size:26px}.title span{font-size:12px}
-  .content{padding:10px 30px 100px;display:grid;grid-template-columns:1.08fr .92fr;align-items:start;gap:16px}
-  .summary{grid-row:span 2;padding:22px}.summary-main{padding:8px 4px}.summary-icon{width:82px;height:82px}.summary-text strong{font-size:44px}.health{min-height:72px}
-  .flow{grid-column:2}.actions{grid-column:2}.attention{grid-column:1/-1}
-  .bottom-nav{height:82px;margin-top:-82px}.nav-item{width:70px}.nav-scan{margin-left:8px;margin-right:8px}
-}
-@media (min-width:1080px){
-  .phone{width:min(92vw,1120px);height:min(86vh,780px)}
-  .content{grid-template-columns:1.15fr .85fr .85fr;gap:20px;padding-left:38px;padding-right:38px}
-  .summary{grid-row:span 2}.flow{grid-column:2/-1}.actions{grid-column:2/-1}.attention{grid-column:1/-1;display:grid;grid-template-columns:150px 1fr 1fr}.attention-head{padding:18px}.row{border-top:0;border-left:1px solid #f2f3f8}
-  .top{padding-left:38px;padding-right:38px}
 }
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
 </style>
