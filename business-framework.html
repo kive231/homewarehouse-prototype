@@ -24,10 +24,10 @@
 
   <section id="scope" class="section">
     <h2>01. 项目定位与边界</h2>
-    <p class="lead"><b>结论：</b>先做「家庭物品库存 + 空间定位 + 分类维护 + 扫码追溯」四件事。</p>
+    <p class="lead"><b>结论：</b>先做「家庭成员协作 + 物品库存 + 空间定位 + 分类维护 + 扫码追溯」五件事。</p>
     <div class="grid">
       <div class="card"><b>核心价值</b><p class="muted">帮用户知道东西在哪里、还有多少、什么时候该处理。</p></div>
-      <div class="card"><b>核心场景</b><p class="muted">录入物品、绑定位置、扫码查看、消耗补货、移动位置、查看记录。</p></div>
+      <div class="card"><b>核心场景</b><p class="muted">邀请家庭成员、录入物品、绑定位置、扫码查看、消耗补货、移动位置、查看记录。</p></div>
       <div class="card"><b>不做什么</b><p class="muted">不做采购审批、供应商、财务、复杂权限、企业多仓 ERP。</p></div>
     </div>
     <div class="quote">产品体验按手机系统文件管理器设计：一级页进入管理，管理页进入空间/分类，每次只看当前层级，返回上一层，不展示复杂树。</div>
@@ -35,20 +35,20 @@
 
   <section id="ia" class="section">
     <h2>02. 信息架构</h2>
-    <h3>一级页面</h3>
-    <div class="proto"><span>1. 登录</span><span>2. 首页</span><span>3. 管理</span><span>24. 我的</span></div>
-    <h3>存储空间管理：柜子 → 层 → 盒子</h3>
-    <div class="tree">3. 管理
-└─ 4. 空间结构维护（柜子列表）
-   ├─ 5. 柜子详情（层列表）
-   │  └─ 7. 层详情（盒子列表）
-   └─ 6. 柜子/层/盒表单</div>
+    <h3>五个底部入口</h3>
+    <div class="proto"><span>1. 首页</span><span>2. 物品</span><span>3. 扫码</span><span>4. 空间</span><span>5. 我的</span></div>
+    <h3>存储空间管理：柜子 → 层 → 收纳盒</h3>
+    <div class="tree">4. 空间
+└─ 空间结构（柜子列表）
+   ├─ 柜子详情（层列表）
+   │  └─ 层详情（收纳盒列表）
+   └─ 柜子/层/收纳盒通用表单</div>
     <h3>存货分类管理：大类 → 子类 → 细类</h3>
-    <div class="tree">3. 管理
-└─ 9. 存货分类维护（大类列表）
-   ├─ 9-2. 子类列表
-   │  └─ 9-3. 细类列表
-   └─ 10. 新增/编辑分类</div>
+    <div class="tree">4. 空间
+└─ 存货分类（大类列表）
+   ├─ 子类列表
+   │  └─ 细类列表
+   └─ 1–3 级分类通用表单</div>
     <p class="muted">分类严格三层，不做标签池、模板关联、无限树。空间也是三层主导航，盒子内部可后端支持嵌套，但第一版 UI 不暴露复杂层级。</p>
   </section>
 
@@ -56,10 +56,10 @@
     <h2>03. 核心业务流程</h2>
     <h3>3.1 建仓流程</h3>
     <div class="flow">
-      <div class="step"><span class="num">1</span><div><b>创建空间结构</b><br><span class="muted">管理 → 空间结构维护 → 新增柜子 → 新增层 → 新增盒子。</span></div></div>
-      <div class="step"><span class="num">2</span><div><b>创建存货分类</b><br><span class="muted">管理 → 存货分类维护 → 新增大类 → 子类 → 细类。</span></div></div>
+      <div class="step"><span class="num">1</span><div><b>创建空间结构</b><br><span class="muted">空间 → 空间结构 → 新增柜子 → 新增层 → 新增收纳盒。</span></div></div>
+      <div class="step"><span class="num">2</span><div><b>创建存货分类</b><br><span class="muted">空间 → 存货分类 → 新增大类 → 子类 → 细类。</span></div></div>
       <div class="step"><span class="num">3</span><div><b>录入物品</b><br><span class="muted">首页/扫码页进入新增物品，选择位置节点和细类，填写数量、单位、保质期。</span></div></div>
-      <div class="step"><span class="num">4</span><div><b>绑定二维码</b><br><span class="muted">给盒子或物品生成二维码，扫码后直接进入详情或盒子清单。</span></div></div>
+      <div class="step"><span class="num">4</span><div><b>绑定二维码</b><br><span class="muted">给物品或任意空间节点生成二维码，扫码后进入对应详情。</span></div></div>
     </div>
     <h3>3.2 找物流程</h3>
     <div class="flow">
@@ -77,22 +77,25 @@
   <section id="domain" class="section">
     <h2>04. 领域模型</h2>
     <table class="table"><thead><tr><th>对象</th><th>职责</th><th>关键字段</th><th>设计约束</th></tr></thead><tbody>
-      <tr><td>User</td><td>账户</td><td>id, nickname, avatar, status</td><td>第一版个人账户，预留 owner_id。</td></tr>
-      <tr><td>LocationNode</td><td>空间节点</td><td>id, parent_id, type, name, code, sort</td><td>type 只暴露 CABINET/LAYER/BOX 三层。</td></tr>
-      <tr><td>CategoryNode</td><td>存货分类</td><td>id, parent_id, level, name, icon, color</td><td>level 固定 1/2/3，不做标签。</td></tr>
-      <tr><td>Item</td><td>物品主档</td><td>name, category_id, location_id, unit, qty</td><td>必须绑定一个位置和一个分类。</td></tr>
-      <tr><td>InventoryRecord</td><td>库存流水</td><td>type, before_qty, change_qty, after_qty</td><td>所有消耗、补货、移动都写记录。</td></tr>
-      <tr><td>QRCode</td><td>扫码入口</td><td>target_type, target_id, code_url</td><td>可绑定盒子或物品。</td></tr>
+      <tr><td>User</td><td>登录账户</td><td>id, nickname, avatar, status</td><td>用户通过成员关系进入家庭。</td></tr>
+      <tr><td>Household</td><td>家庭数据边界</td><td>id, name, owner_id, status</td><td>物品、空间、分类、流水和二维码都必须归属家庭。</td></tr>
+      <tr><td>HouseholdMember</td><td>家庭成员</td><td>household_id, user_id, role, status</td><td>role 仅 OWNER/MEMBER。</td></tr>
+      <tr><td>LocationNode</td><td>空间节点</td><td>id, household_id, parent_id, type, name, code, sort</td><td>type 固定 CABINET/LAYER/BOX；物品只能绑定 BOX。</td></tr>
+      <tr><td>CategoryNode</td><td>存货分类</td><td>id, household_id, parent_id, level, name, icon, color</td><td>level 固定 1/2/3，不做标签。</td></tr>
+      <tr><td>Item</td><td>物品主档</td><td>id, household_id, code, name, category_id, location_id, unit, qty, low_stock_threshold, status</td><td>库存不可直接编辑；必须绑定末级位置和分类。</td></tr>
+      <tr><td>StockBatch</td><td>库存批次</td><td>item_id, batch_no, qty, expiry_date</td><td>每次补货可形成独立批次；批次号和保质期允许为空。</td></tr>
+      <tr><td>InventoryRecord</td><td>库存流水</td><td>type, before_qty, change_qty, after_qty, batch_id, operator_id, note</td><td>所有补货、消耗、移动都写记录；低库存条件为 qty &lt;= threshold。</td></tr>
+      <tr><td>QRCode</td><td>二维码资产</td><td>id, household_id, code, target_type, target_id, status, code_url</td><td>可绑定物品或任意空间节点；同一时刻最多绑定一个对象。</td></tr>
     </tbody></table>
   </section>
 
   <section id="pages" class="section">
     <h2>05. 原型页面清单与跳转</h2>
     <div class="grid two">
-      <div class="card"><b>一级页面</b><p class="muted">登录、首页、管理、我的。首页负责搜索、概览、快捷新增；管理页只放维护入口。</p></div>
+      <div class="card"><b>一级页面</b><p class="muted">首页、物品、扫码、空间、我的。登录和首次建仓是进入一级页面前的独立流程。</p></div>
       <div class="card"><b>存储空间管理</b><p class="muted">空间结构维护 → 柜子详情 → 层详情 → 空间节点表单。</p></div>
       <div class="card"><b>存货分类管理</b><p class="muted">存货分类维护 → 子类列表 → 细类列表 → 分类表单。</p></div>
-      <div class="card"><b>物品操作流程</b><p class="muted">物品详情、新增物品、消耗、补货、移动位置、搜索、记录、扫码。</p></div>
+      <div class="card"><b>物品操作流程</b><p class="muted">物品详情、新增物品、消耗、补货、移动位置、搜索结果、待处理、库存流水。</p></div>
     </div>
     <p>在线原型：<a href="http://47.99.149.119:8648/prototype/">http://47.99.149.119:8648/prototype/</a></p>
   </section>
@@ -104,7 +107,7 @@
       <div class="card"><b>后端</b><p class="muted">Spring Boot 3 + Spring Security + JWT/Refresh Token。</p></div>
       <div class="card"><b>数据库</b><p class="muted">PostgreSQL 优先；MySQL 可替代。核心靠邻接表建树。</p></div>
       <div class="card"><b>部署</b><p class="muted">Docker Compose：app-api、postgres、nginx，可后置 Redis/MinIO。</p></div>
-      <div class="card"><b>权限</b><p class="muted">第一版个人账户。后续扩展 Household、成员、私人物品。</p></div>
+      <div class="card"><b>权限</b><p class="muted">第一版即支持 Household、OWNER/MEMBER 两种角色；不做复杂字段级权限。</p></div>
       <div class="card"><b>文件</b><p class="muted">二维码图片可动态生成；头像/图片后置对象存储。</p></div>
     </div>
   </section>
@@ -113,11 +116,14 @@
     <h2>07. 后端 API 边界</h2>
     <table class="table"><thead><tr><th>模块</th><th>接口范围</th><th>备注</th></tr></thead><tbody>
       <tr><td>Auth</td><td>/auth/login, /auth/refresh, /auth/logout</td><td>前期不开放注册。</td></tr>
+      <tr><td>Household</td><td>详情、首次建仓、成员邀请、成员列表</td><td>所有者可管理成员；成员可维护家庭库存。</td></tr>
       <tr><td>Location</td><td>CRUD、按父级查询、移动排序、二维码绑定</td><td>支撑柜子/层/盒子。</td></tr>
       <tr><td>Category</td><td>CRUD、按父级查询、移动排序</td><td>严格校验最大 3 层。</td></tr>
       <tr><td>Item</td><td>新增、编辑、详情、搜索、归档</td><td>查询需要支持位置、分类、关键词。</td></tr>
-      <tr><td>Inventory</td><td>consume、replenish、move、records</td><td>所有变动走服务层事务。</td></tr>
-      <tr><td>QRCode</td><td>generate、scan、bind、unbind</td><td>scan 返回 target_type 和 target_id。</td></tr>
+      <tr><td>Inventory</td><td>consume、replenish、move、records、batches</td><td>所有变动走服务层事务；禁止直接修改 qty。</td></tr>
+      <tr><td>QRCode</td><td>generate、scan、bind、unbind、disable、enable</td><td>scan 返回 target_type、target_id 和 status。</td></tr>
+      <tr><td>Preference</td><td>提醒开关、默认天数、提醒时间</td><td>物品单独设置优先于家庭默认值。</td></tr>
+      <tr><td>Data</td><td>export、backup、restore</td><td>恢复前必须生成快照并二次确认。</td></tr>
     </tbody></table>
   </section>
 
